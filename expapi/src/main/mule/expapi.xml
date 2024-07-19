@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="9090c9ea-e7aa-44bc-85e3-361eb21d9b1b" >
+		<http:request-connection host="localhost" port="8081"/>
+	</http:request-config>
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="e55bf869-a368-47ae-a49c-3820ea9ba970" >
+		<http:listener-connection host="0.0.0.0" port="8089" />
+	</http:listener-config>
+	<flow name="expapiFlow" doc:id="1ad732a3-504b-46e8-bd40-26452197b2bb" >
+		<http:listener doc:name="Listener" doc:id="18623093-4cdf-466c-b3e1-8613decc93f5" config-ref="HTTP_Listener_config" path="/expapi">
+			<http:error-response >
+				<http:body ><![CDATA[#[payload]]]></http:body>
+			</http:error-response>
+		</http:listener>
+		<logger level="INFO" doc:name="Logger" doc:id="118aea1e-428c-4253-a85a-07843e7c0dd8" message="before calling prc api"/>
+		<try doc:name="Try" doc:id="8f252e64-8410-4c8e-8f49-e97eed774bc1">
+							<http:request method="POST" doc:name="Request" doc:id="41e61a00-c026-4c9c-a2f8-504579d3be64" config-ref="HTTP_Request_configuration" responseTimeout="5000" path="/prcapi" />
+							<error-handler>
+								
+																						<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="23f4ba4b-078b-4ee0-9ac0-40bc02abc40b" type="ANY" when='#[(error.muleMessage.payload.error_responses.source_type[0] == "ERP") or (error.muleMessage.payload.error_responses.source_type[0] == "MULE")]'>
+							<logger level="INFO" doc:name="Logger" doc:id="f7a84a43-491a-482a-8926-639fb57c14b6" message="Error retrieved from process api" />
+							<ee:transform doc:name="Transform Message" doc:id="8e6365e8-8a80-42ef-afe8-77cd647a71bd">
+								<ee:message>
+									<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+error.muleMessage.payload
+]]></ee:set-payload>
+								</ee:message>
+							</ee:transform>
+
+						
+						</on-error-continue>
+						<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="543586ad-137f-4316-8331-7ec671d16bbf" type="ANY">
+							<logger level="INFO" doc:name="Logger" doc:id="77d630da-b142-42e7-9180-ff66e18d1ff6" message="Error handler of type ANY " />
+							<ee:transform doc:name="Transform Message" doc:id="3ece7d2b-d1a5-4cf2-9816-8a6ef22f2e6e">
+								<ee:message>
+							<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  
+    "error_responses": [
+    	{
+    		"brex_object_id": vars.reqMetadata.entityDetails.identifiers.value,
+    		"source_type": "MULE",
+    		 "error_type": error.errorType.asString default "internal_server_error",
+             "error_code": 500,
+             "error_message":  error.detailedDescription default "internal_server_error",
+             "raw_erp_response": ""    		
+    	}
+    	
+    ]
+}]]></ee:set-payload>
+
+								</ee:message>
+								<ee:variables >
+								</ee:variables>
+							</ee:transform>
+						
+						
+						</on-error-propagate>
+																
+							</error-handler>
+						</try>
+		
+		<logger level="INFO" doc:name="Logger" doc:id="a8fb9b99-59bb-4625-bcc3-51265e79b33c" message="after calling request"/>
+	</flow>
+</mule>
