@@ -44,9 +44,9 @@ jobs:
       
     - name: Stamp artifact file name with commit hash
       run: |
-        artifactName1=$(ls expapi/target/*.jar | head -1)
+        artifactName1=$(ls target/*.jar | head -1)
         commitHash=$(git rev-parse --short "$GITHUB_SHA")
-        artifactName2=$(ls expapi/target/*.jar | head -1 | sed "s/.jar/-$commitHash.jar/g")
+        artifactName2=$(ls target/*.jar | head -1 | sed "s/.jar/-$commitHash.jar/g")
         mv $artifactName1 $artifactName2
     
     - name: Upload artifact 
