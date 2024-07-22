@@ -86,7 +86,7 @@ jobs:
     - uses: actions/download-artifact@v3
       with:
         name: artifacts
-        path: expapi
+        path: expapi/target
 
     - name: check directory
       run: pwd
