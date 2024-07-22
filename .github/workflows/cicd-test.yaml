@@ -88,6 +88,9 @@ jobs:
         name: artifacts
         path: expapi
 
+    - name: check directory
+      run: pwd
+      
     - name: List all files
       run: ls -al expapi
 
