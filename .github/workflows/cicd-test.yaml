@@ -54,7 +54,34 @@ jobs:
       with:
           name: artifacts
           path: target/*.jar
-             
+          
+  upload:
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      CA_CLIENT_ID: 10eeffa3f9184598b38dad7f43e024ab
+      CA_CLIENT_SECRET: 0cD3022eCA514812Bc464a85D5635db6          
+    
+    steps:    
+    
+    - uses: actions/checkout@v3
+    
+    - uses: actions/cache@v3
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+    
+    - uses: actions/download-artifact@v3
+      with:
+        name: artifacts
+    
+    - name: Upload to Exchange
+      run: |
+        artifactName=$(ls *.jar | head -1)
+        mvn deploy -s .maven/settings.xml -Dmule.artifact=$artifactName -DskipMunitTests
+        
   deploy:
     needs: build
     runs-on: ubuntu-latest
