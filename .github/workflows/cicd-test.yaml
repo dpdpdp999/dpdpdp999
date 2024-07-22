@@ -3,7 +3,7 @@
 name: exp-api-cicd-test
 on:
   push:
-    branches: [ test-cicd/expapi ]
+    branches: [ test-cicd ]
 
 jobs:
   build:
@@ -21,7 +21,7 @@ jobs:
       uses: actions/cache@v1
       with:
         path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/expapi/pom.xml') }}
         restore-keys: |
           ${{ runner.os }}-maven-
     
