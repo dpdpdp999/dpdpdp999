@@ -4,6 +4,11 @@ name: exp-api-cicd-test
 on:
   push:
     branches: [ test-cicd ]
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: expapi
 
 jobs:
   build:
