@@ -82,14 +82,16 @@ jobs:
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
         restore-keys: |
           ${{ runner.os }}-maven-
+          
+    - name: check directory
+      run: pwd
     
     - uses: actions/download-artifact@v3
       with:
         name: artifacts
-        path: expapi/target
+        path: target/*.jar
 
-    - name: check directory
-      run: pwd
+
     
     - name: Upload to Exchange
       run: |
