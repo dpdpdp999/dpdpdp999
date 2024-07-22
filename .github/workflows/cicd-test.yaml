@@ -86,7 +86,9 @@ jobs:
         path: expapi/target
         
     - name: List all files
-      run: ls -al expapi/target
+      run: |
+        cd expapi
+        ls -al target
     
     - name: Upload to Exchange
       run: |
