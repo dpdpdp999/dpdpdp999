@@ -36,6 +36,7 @@
 						<businessGroupId>e22eea98-1cd3-49fd-9540-a8802b565500</businessGroupId>
 						<applicationName>exp-api-cicd-test</applicationName>
 						<environment>Sandbox</environment>
+						<target>Cloudhub-US-East-2</target>
 						
 						<replicas>1</replicas>
 						<vCores>0.1</vCores>
