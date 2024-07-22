@@ -18,19 +18,29 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 			</http:error-response>
 		</http:listener>
 		<logger level="INFO" doc:name="Logger" doc:id="118aea1e-428c-4253-a85a-07843e7c0dd8" message="before calling prc api"/>
-		<try doc:name="Try" doc:id="8f252e64-8410-4c8e-8f49-e97eed774bc1">
+		<ee:transform doc:name="Transform Message" doc:id="24bc70fd-11e8-45b1-aa91-672c2a1cd330" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message": "Request received successfully"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<!-- [STUDIO:"Try"]<try doc:name="Try" doc:id="8f252e64-8410-4c8e-8f49-e97eed774bc1">
 							<http:request method="POST" doc:name="Request" doc:id="41e61a00-c026-4c9c-a2f8-504579d3be64" config-ref="HTTP_Request_configuration" responseTimeout="5000" path="/prcapi" />
 							<error-handler>
 								
-																						<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="23f4ba4b-078b-4ee0-9ac0-40bc02abc40b" type="ANY" when='#[(error.muleMessage.payload.error_responses.source_type[0] == "ERP") or (error.muleMessage.payload.error_responses.source_type[0] == "MULE")]'>
+																						<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="23f4ba4b-078b-4ee0-9ac0-40bc02abc40b" type="ANY" when='#[(error.muleMessage.payload.error_responses.source_type[0&#93; == "ERP") or (error.muleMessage.payload.error_responses.source_type[0&#93; == "MULE")&#93;'>
 							<logger level="INFO" doc:name="Logger" doc:id="f7a84a43-491a-482a-8926-639fb57c14b6" message="Error retrieved from process api" />
 							<ee:transform doc:name="Transform Message" doc:id="8e6365e8-8a80-42ef-afe8-77cd647a71bd">
 								<ee:message>
 									<ee:set-payload><![CDATA[%dw 2.0
 output application/json
----
+&#45;&#45;-
 error.muleMessage.payload
-]]></ee:set-payload>
+&#93;&#93;></ee:set-payload>
 								</ee:message>
 							</ee:transform>
 
@@ -42,7 +52,7 @@ error.muleMessage.payload
 								<ee:message>
 							<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
----
+&#45;&#45;-
 {
   
     "error_responses": [
@@ -55,8 +65,8 @@ output application/json
              "raw_erp_response": ""    		
     	}
     	
-    ]
-}]]></ee:set-payload>
+    &#93;
+}&#93;&#93;></ee:set-payload>
 
 								</ee:message>
 								<ee:variables >
@@ -67,7 +77,7 @@ output application/json
 						</on-error-propagate>
 																
 							</error-handler>
-						</try>
+						</try> [STUDIO] -->
 		
 		<logger level="INFO" doc:name="Logger" doc:id="a8fb9b99-59bb-4625-bcc3-51265e79b33c" message="after calling request"/>
 	</flow>
