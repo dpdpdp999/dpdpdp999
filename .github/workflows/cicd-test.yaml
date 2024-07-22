@@ -94,7 +94,7 @@ jobs:
     - name: Upload to Exchange
       run: |
         artifactName=$(ls *.jar | head -1)
-        mvn deploy -s ../.maven/settings.xml -Dmule.artifact=$artifactName -DskipMunitTests
+        mvn deploy -s ../expapi/.maven/settings.xml -Dmule.artifact=$artifactName -DskipMunitTests
         
   deploy:
     needs: upload
