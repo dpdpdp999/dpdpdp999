@@ -56,10 +56,10 @@ jobs:
         mv $artifactName1 $artifactName2
     
     - name: Upload artifact in build 
-      uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@v3
       with:
           name: artifacts
-          path: target/*.jar
+          path: expapi/target/*.jar
       
   deploy:
     needs: build
