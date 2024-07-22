@@ -55,4 +55,4 @@ jobs:
       run: |
         artifactName=$(ls *.jar | head -1)
         
-        mvn deploy -e -DmuleDeploy -Dmule.artifact=$artifactName -s .maven/settings.xml -DskipTests --file pom.xml
+        mvn deploy -e -DmuleDeploy -Dmule.artifact=$artifactName -s .maven/settings.xml -DskipTests --file expapi/pom.xml
