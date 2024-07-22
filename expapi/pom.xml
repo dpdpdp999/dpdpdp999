@@ -34,14 +34,30 @@
 						<uri>https://anypoint.mulesoft.com</uri>
 						<muleVersion>4.4.0</muleVersion>
 						<businessGroupId>e22eea98-1cd3-49fd-9540-a8802b565500</businessGroupId>
-						<applicationName>exp-api-cicd-test2</applicationName>
+						<applicationName>exp-api-cicd-test</applicationName>
 						<environment>Sandbox</environment>
+						<region>us-east-2</region>
 						<replicas>1</replicas>
 						<vCores>0.1</vCores>
 						<skipDeploymentVerification>true</skipDeploymentVerification>
-
+						<deploymentSettings>
+							<http>
+								<inbound>
+									<lastMileSecurity>false</lastMileSecurity>
+									<forwardSslSession>false</forwardSslSession>
+								</inbound>
+							</http>
+							<generateDefaultPublicUrl>true</generateDefaultPublicUrl>
+						</deploymentSettings>
 						<server>anypoint-exchange-v3</server>
-						<objectStoreV2>true</objectStoreV2>
+						<integrations>
+							<services>
+								<objectStoreV2>
+									<enabled>true</enabled>
+								</objectStoreV2>
+							</services>
+						</integrations>
+						
 					</cloudhub2Deployment>
 					<executions>
 						<execution>
