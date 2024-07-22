@@ -47,6 +47,9 @@ jobs:
 
     - name: List all files
       run: ls -al target
+
+    - name: list all expapi
+      run: ls -al expapi
       
     - name: Stamp artifact file name with commit hash
       run: |
@@ -92,7 +95,7 @@ jobs:
       run: pwd
       
     - name: List all files
-      run: ls -al target
+      run: ls -al expapi
     
     - name: Upload to Exchange
       run: |
