@@ -53,7 +53,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
           name: artifacts
-          path: target/*.jar
+          path: expapi/target/*.jar
           
   upload:
     needs: build
@@ -65,6 +65,9 @@ jobs:
     steps:    
     
     - uses: actions/checkout@v3
+      with:
+        repository: dpdpdp999
+        path: expapi
     
     - uses: actions/cache@v3
       with:
@@ -76,9 +79,11 @@ jobs:
     - uses: actions/download-artifact@v3
       with:
         name: artifacts
+        path: expapi
     
     - name: Upload to Exchange
       run: |
+        cd expapi
         artifactName=$(ls *.jar | head -1)
         mvn deploy -s .maven/settings.xml -Dmule.artifact=$artifactName -DskipMunitTests
         
