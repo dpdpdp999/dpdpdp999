@@ -3,7 +3,7 @@
 name: exp-api-cicd-test
 on:
   push:
-    branches: [ test-cicd ]
+    branches: [ test-cicd/expapi ]
 
 jobs:
   build:
@@ -55,4 +55,4 @@ jobs:
       run: |
         artifactName=$(ls *.jar | head -1)
         
-        mvn deploy -e -DmuleDeploy -Dmule.artifact=$artifactName -s .maven/settings.xml -DskipTests --file expapi/pom.xml
+        mvn deploy -e -DmuleDeploy -Dmule.artifact=$artifactName -s .maven/settings.xml -DskipTests --file pom.xml
