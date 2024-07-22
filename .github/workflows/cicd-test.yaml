@@ -47,9 +47,6 @@ jobs:
 
     - name: List all files
       run: ls -al target
-
-    - name: list all expapi
-      run: ls -al expapi
       
     - name: Stamp artifact file name with commit hash
       run: |
@@ -62,7 +59,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
           name: artifacts
-          path: expapi/target/*.jar
+          path: target/*.jar
           
   upload:
     needs: build
@@ -93,9 +90,6 @@ jobs:
 
     - name: check directory
       run: pwd
-      
-    - name: List all files
-      run: ls -al expapi
     
     - name: Upload to Exchange
       run: |
