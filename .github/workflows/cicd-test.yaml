@@ -48,58 +48,8 @@ jobs:
     - name: List all files
       run: ls -al target
       
-    - name: Stamp artifact file name with commit hash
-      run: |
-        artifactName1=$(ls target/*.jar | head -1)
-        commitHash=$(git rev-parse --short "$GITHUB_SHA")
-        artifactName2=$(ls target/*.jar | head -1 | sed "s/.jar/-$commitHash.jar/g")
-        mv $artifactName1 $artifactName2
-    
-    - name: Upload artifact 
-      uses: actions/upload-artifact@v3
-      with:
-          name: artifacts
-          path: target/*.jar
-          
-  upload:
-    needs: build
-    runs-on: ubuntu-latest
-    env:
-      CA_CLIENT_ID: 10eeffa3f9184598b38dad7f43e024ab
-      CA_CLIENT_SECRET: 0cD3022eCA514812Bc464a85D5635db6          
-    
-    steps:    
-    
-    - uses: actions/checkout@v3
-      with:
-        repository: dpdpdp999/dpdpdp999
-        ref: test-cicd
-        path: expapi
-    
-    - uses: actions/cache@v3
-      with:
-        path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-maven-
-          
-    - name: check directory
-      run: pwd
-    
-    - uses: actions/download-artifact@v3
-      with:
-        name: artifacts
-        path: target/*.jar
-
-
-    
-    - name: Upload to Exchange
-      run: |
-        artifactName=$(ls *.jar | head -1)
-        mvn deploy -s ../.maven/settings.xml -Dmule.artifact=$artifactName -DskipMunitTests
-        
   deploy:
-    needs: upload
+    needs: build
     runs-on: ubuntu-latest
     env:
       CA_CLIENT_ID: 10eeffa3f9184598b38dad7f43e024ab
@@ -118,16 +68,8 @@ jobs:
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
         restore-keys: |
           ${{ runner.os }}-maven-
-    - uses: actions/download-artifact@v3
-      with:
-        name: artifacts
-        path: expapi/target/*.jar
 
-    - name: List all files
-      run: ls -al expapi/target 
-        
     - name: Deploy to Sandbox
-      run: |
-        cd expapi/target
+      run: 
         artifactName=$(ls *.jar | head -1)
-        mvn deploy -e -DmuleDeploy -Dmule.artifact=$artifactName -s ../.maven/settings.xml -DskipTests --file ../pom.xml
+        mvn deploy -e -DmuleDeploy -Dmule.artifact=$artifactName -s .maven/settings.xml -DskipTests --file pom.xml
