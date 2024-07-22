@@ -83,7 +83,7 @@ jobs:
     - uses: actions/download-artifact@v3
       with:
         name: artifacts
-        path: expapi/target
+        path: expapi
 
     - name: List all files
       run: ls -al expapi
