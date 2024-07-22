@@ -92,10 +92,7 @@ jobs:
       run: pwd
       
     - name: List all files
-      run: ls -al expapi
-
-    - name: change directory
-      run: cd expapi/target
+      run: ls -al target
     
     - name: Upload to Exchange
       run: |
