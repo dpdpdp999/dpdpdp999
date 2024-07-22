@@ -87,10 +87,12 @@ jobs:
 
     - name: List all files
       run: ls -al expapi
+
+    - name: change directory
+      run: cd expapi
     
     - name: Upload to Exchange
       run: |
-        cd expapi/target
         artifactName=$(ls *.jar | head -1)
         mvn deploy -s ../.maven/settings.xml -Dmule.artifact=$artifactName -DskipMunitTests
         
