@@ -39,6 +39,7 @@
 						<region>us-east-2</region>
 						<workers>1</workers>
 						<workerType>MICRO</workerType>
+						<server>anypoint-exchange-v3</server>
 						<objectStoreV2>true</objectStoreV2>
 					</cloudHubDeployment>
 					<executions>
