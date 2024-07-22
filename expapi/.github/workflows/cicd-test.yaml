@@ -1,10 +1,9 @@
 # This workflow will build a MuleSoft project and deploy to CloudHub Test env
 
-name: Build and Deploy to Test
+name: exp-api-cicd-test
 on:
   push:
     branches: [ test-cicd ]
-  workflow_dispatch:
 
 jobs:
   build:
@@ -37,47 +36,7 @@ jobs:
     
     - name: Build with maven
       run: mvn -B clean package -s .maven/settings.xml -DskipMunitTests
-    
-    - name: Stamp artifact file name with commit hash
-      run: |
-        artifactName1=$(ls target/*.jar | head -1)
-        commitHash=$(git rev-parse --short "$GITHUB_SHA")
-        artifactName2=$(ls target/*.jar | head -1 | sed "s/.jar/-$commitHash.jar/g")
-        mv $artifactName1 $artifactName2
-    
-    - name: Upload artifact 
-      uses: actions/upload-artifact@master
-      with:
-          name: artifacts
-          path: target/*.jar
-          
-  upload:
-    needs: build
-    runs-on: ubuntu-latest
-    env:
-      CA_CLIENT_ID: 10eeffa3f9184598b38dad7f43e024ab
-      CA_CLIENT_SECRET: 0cD3022eCA514812Bc464a85D5635db6          
-    
-    steps:    
-    
-    - uses: actions/checkout@v3
-    
-    - uses: actions/cache@v3
-      with:
-        path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-maven-
-    
-    - uses: actions/download-artifact@master
-      with:
-        name: artifacts
-    
-    - name: Upload to Exchange
-      run: |
-        artifactName=$(ls *.jar | head -1)
-        mvn deploy -s .maven/settings.xml -Dmule.artifact=$artifactName -DskipMunitTests
-         
+             
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -92,10 +51,6 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
     
-    - name: Cache dependencies
-      uses: actions/download-artifact@master
-      with:
-        name: artifacts
     - name: Deploy to Test
       run: |
         artifactName=$(ls *.jar | head -1)
