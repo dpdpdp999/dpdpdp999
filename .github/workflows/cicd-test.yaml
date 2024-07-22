@@ -84,11 +84,6 @@ jobs:
       with:
         name: artifacts
         path: expapi/target
-        
-    - name: List all files
-      run: |
-        cd expapi
-        ls -al target
     
     - name: Upload to Exchange
       run: |
