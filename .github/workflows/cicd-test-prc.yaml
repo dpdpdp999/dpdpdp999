@@ -4,6 +4,8 @@ name: prc-api-cicd-test
 on:
   push:
     branches: [ test-cicd ]
+    paths:
+       - 'prcapi/**'
   workflow_dispatch:
 
 defaults:
