@@ -5,7 +5,13 @@ on:
   push:
     branches: [ test-cicd ]
     paths:
-       - 'expapi/**'  
+       - 'expapi/**'
+  pull-request:
+    branches: 
+       - dev
+       - prod
+    paths:
+       - 'expapi/**'
   workflow_dispatch:
 
 defaults:

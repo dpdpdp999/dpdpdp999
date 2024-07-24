@@ -6,6 +6,12 @@ on:
     branches: [ test-cicd ]
     paths:
        - 'prcapi/**'
+  pull-request:
+    branches: 
+       - dev
+       - prod
+    paths:
+       - 'expapi/**'
   workflow_dispatch:
 
 defaults:
