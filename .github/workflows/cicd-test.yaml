@@ -4,6 +4,8 @@ name: exp-api-cicd-test
 on:
   push:
     branches: [ test-cicd ]
+  paths:
+    - 'expapi/**'  
   workflow_dispatch:
 
 defaults:
