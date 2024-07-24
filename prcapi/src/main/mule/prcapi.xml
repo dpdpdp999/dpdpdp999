@@ -17,7 +17,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 				<http:body ><![CDATA[#[payload]]]></http:body>
 			</http:error-response>
 		</http:listener>
-		<logger level="INFO" doc:name="Logger" doc:id="e4a41110-984b-4eb9-9ced-efce0c7ee9aa" message="before request starts"/>
+		<logger level="INFO" doc:name="Logger" doc:id="e4a41110-984b-4eb9-9ced-efce0c7ee9aa" message="before request started"/>
 				<!-- [STUDIO:"Try"]<try doc:name="Try" doc:id="c52c5f3d-cd35-4bd0-a5b6-e83e4d5696df" >
 			<http:request method="POST" doc:name="Request" doc:id="fe76f4fd-c7a8-44f5-9f09-87d2f56dc0b6" config-ref="HTTP_Request_configuration" path="/sysapi" responseTimeout="5000" />
 			<error-handler >
