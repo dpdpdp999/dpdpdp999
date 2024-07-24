@@ -11,7 +11,7 @@ on:
        - dev
        - prod
     paths:
-       - 'expapi/**'
+       - 'prcapi/**'
   workflow_dispatch:
 
 defaults:
