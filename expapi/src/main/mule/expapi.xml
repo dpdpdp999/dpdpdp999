@@ -17,7 +17,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 				<http:body ><![CDATA[#[payload]]]></http:body>
 			</http:error-response>
 		</http:listener>
-		<logger level="INFO" doc:name="Logger" doc:id="118aea1e-428c-4253-a85a-07843e7c0dd8" message="before calling prc api"/>
+		<logger level="INFO" doc:name="Logger" doc:id="118aea1e-428c-4253-a85a-07843e7c0dd8" message="before calling prc api for testing"/>
 		<ee:transform doc:name="Transform Message" doc:id="24bc70fd-11e8-45b1-aa91-672c2a1cd330" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
