@@ -3,12 +3,13 @@
 name: prc-api-cicd-test
 on:
   push:
-    branches: [ test-cicd ]
+    branches: [ dev ]
     paths:
        - 'prcapi/**'
   pull_request:
     branches: 
        - dev
+       - qa
        - prod
     paths:
        - 'prcapi/**'
