@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="a6997bd5-e952-4b09-b6a9-b6cb19fa59cd" >
+		<http:request-connection host="localhost" connectionIdleTimeout="5000" port="8085"/>
+	</http:request-config>
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="97243161-fbe0-4793-baa4-f2f23630945e" >
+		<http:listener-connection host="0.0.0.0" port="8081" readTimeout="5000" />
+	</http:listener-config>
+	<flow name="prcapiFlow" doc:id="5d0f25f2-265e-4497-9403-3d8ba046ccd1" >
+		<http:listener doc:name="Listener" doc:id="0ccda0d4-e1d1-4371-8f5a-c44a03588c5c" config-ref="HTTP_Listener_config" path="/prcapi">
+			<http:error-response >
+				<http:body ><![CDATA[#[payload]]]></http:body>
+			</http:error-response>
+		</http:listener>
+		<logger level="INFO" doc:name="Logger" doc:id="e4a41110-984b-4eb9-9ced-efce0c7ee9aa" message="before request started for testing"/>
+				<!-- [STUDIO:"Try"]<try doc:name="Try" doc:id="c52c5f3d-cd35-4bd0-a5b6-e83e4d5696df" >
+			<http:request method="POST" doc:name="Request" doc:id="fe76f4fd-c7a8-44f5-9f09-87d2f56dc0b6" config-ref="HTTP_Request_configuration" path="/sysapi" responseTimeout="5000" />
+			<error-handler >
+				<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="f3550feb-2682-4956-8aef-37a29c076ce4" type="ANY" when='#[(error.muleMessage.payload.error_responses.source_type[0&#93; == "ERP") or (error.muleMessage.payload.error_responses.source_type[0&#93; == "MULE")&#93;'>
+					<ee:transform doc:name="Transform Error Response Message" doc:id="e1a904b6-c92f-4cbc-a4bf-ccbe23e3a3ea" >
+						<ee:message >
+							<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+&#45;&#45;-
+error.muleMessage.payload   	&#93;&#93;></ee:set-payload>
+
+						</ee:message>
+						<ee:variables >
+						</ee:variables>
+					</ee:transform>
+				</on-error-continue>
+				<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="548e463c-d560-431e-95b1-1de494856fd1" type="ANY">
+					<ee:transform doc:name="Transform Message" doc:id="481543a4-2bb8-49ff-84d2-a5f98c43683b" >
+						<ee:message >
+							<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+&#45;&#45;-
+{
+    "error_responses": [
+    	{
+    		"error_type": error.errorType.asString default "internal_server_error",
+    		"source_type": "MULE",    		 
+             "error_code": 500,
+             "error_message":  error.detailedDescription default "internal_server_error",
+             "raw_erp_response": ""    		
+    	}
+    	
+    &#93;
+}&#93;&#93;></ee:set-payload>
+
+						</ee:message>
+						<ee:variables >
+						</ee:variables>
+					</ee:transform>
+				</on-error-continue>
+			
+			</error-handler>
+		</try> [STUDIO] -->
+		
+		<ee:transform doc:name="Transform Message" doc:id="42a7f36f-73a8-4b62-833e-4aeacd98fe06" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message": "process api received the req"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="ffcc03b4-3421-467a-bb6c-696dc5e623ec" message="after request"/>
+		<ee:transform doc:name="Transform Message" doc:id="c3c1bab5-71a1-472b-a7ca-b86725028502" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{"payload" : "response received successfully"}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
