@@ -11,7 +11,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <app.runtime>4.5.1</app.runtime>
+        <app.runtime>4.4.0</app.runtime>
         <mule.maven.plugin.version>4.4.0</mule.maven.plugin.version>
         <mule.businessGroupId>e22eea98-1cd3-49fd-9540-a8802b565500</mule.businessGroupId>
 		<mule.applicationName>exp-api-cicd-test</mule.applicationName>
