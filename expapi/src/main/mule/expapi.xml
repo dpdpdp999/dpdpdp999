@@ -59,7 +59,7 @@ output application/json
     "error_responses": [
     	{
     		"brex_object_id": vars.reqMetadata.entityDetails.identifiers.value,
-    		"source_type": "MULE",
+    		"source_type": "MULE1",
     		 "error_type": error.errorType.asString default "internal_server_error",
              "error_code": 500,
              "error_message":  error.detailedDescription default "internal_server_error",
