@@ -1,31 +1,34 @@
-# This workflow will build a MuleSoft project and deploy to CloudHub Test env
-
 name: exp-api-cicd-test
+
 on:
   push:
-    branches: [ dev ]
+    branches:
+      - dev
     paths:
-       - 'expapi/**'
+      - 'expapi/**'
   pull_request:
-    branches: 
-       - dev
-       - qa
-       - prod
+    branches:
+      - dev
+      - qa
+      - prod
     paths:
-       - 'expapi/**'
+      - 'expapi/**'
   workflow_dispatch:
-
-defaults:
-  run:
-    working-directory: expapi
+    inputs:
+      environment:
+        description: 'Environment to build for'
+        required: true
+        default: 'dev'
+        type: string
 
 jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      CA_CLIENT_ID: 10eeffa3f9184598b38dad7f43e024ab
-      CA_CLIENT_SECRET: 0cD3022eCA514812Bc464a85D5635db6
-    
+      CA_CLIENT_ID: ${{ secrets.CA_CLIENT_ID }}
+      CA_CLIENT_SECRET: ${{ secrets.CA_CLIENT_SECRET }}
+      ENV_NAME: ${{ github.event_name == 'pull_request' && github.base_ref || github.ref_name }}
+
     steps:
     
     - name: Checkout this repo
@@ -43,15 +46,14 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-           
     
     - name: Print effective-settings (optional)
       run: mvn help:effective-settings
     
-    - name: Build with maven
-      run: mvn -B clean package -s .maven/settings.xml -DskipMunitTests
+    - name: Build with Maven
+      run: mvn -B clean package -s .maven/settings.xml -DskipMunitTests -P${{ env.ENV_NAME }}
 
-    - name: check directory
+    - name: Check directory
       run: pwd
 
     - name: List all files
@@ -64,20 +66,20 @@ jobs:
         artifactName2=$(ls target/*.jar | head -1 | sed "s/.jar/-$commitHash.jar/g")
         mv $artifactName1 $artifactName2
     
-    - name: Upload artifact in build 
+    - name: Upload artifact in build
       uses: actions/upload-artifact@v3
       with:
-          name: artifacts
-          path: expapi/target/*.jar
+        name: artifacts
+        path: expapi/target/*.jar
           
   upload:
     needs: build
     runs-on: ubuntu-latest
     env:
-      CA_CLIENT_ID: 10eeffa3f9184598b38dad7f43e024ab
-      CA_CLIENT_SECRET: 0cD3022eCA514812Bc464a85D5635db6
+      CA_CLIENT_ID: ${{ secrets.CA_CLIENT_ID }}
+      CA_CLIENT_SECRET: ${{ secrets.CA_CLIENT_SECRET }}
 
-    steps:    
+    steps:
     
     - uses: actions/checkout@v3
     
@@ -92,7 +94,7 @@ jobs:
       with:
         name: artifacts 
     
-    - name: pwd
+    - name: Print working directory
       run: pwd
         
     - name: Upload to Exchange
@@ -103,15 +105,17 @@ jobs:
     needs: upload
     runs-on: ubuntu-latest
     env:
-      CA_CLIENT_ID: 10eeffa3f9184598b38dad7f43e024ab
-      CA_CLIENT_SECRET: 0cD3022eCA514812Bc464a85D5635db6
-      ANYPOINT_PLATFORM_CLIENT_ID: 46d8b90ed18c42e8831a67ec0767aa2d
-      ANYPOINT_PLATFORM_CLIENT_SECRET: 2e3afa3D41fF4799B6537876e9dDA1B9
-      
-    steps:    
+      CA_CLIENT_ID: ${{ secrets.CA_CLIENT_ID }}
+      CA_CLIENT_SECRET: ${{ secrets.CA_CLIENT_SECRET }}
+      ANYPOINT_PLATFORM_CLIENT_ID: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID }}
+      ANYPOINT_PLATFORM_CLIENT_SECRET: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET }}
+      ENV_NAME: ${{ github.event_name == 'pull_request' && github.base_ref || github.ref_name }}
+
+    steps:
   
     - name: Checkout repository
       uses: actions/checkout@v3
+
     - name: Cache dependencies
       uses: actions/cache@v1
       with:
@@ -119,11 +123,12 @@ jobs:
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
         restore-keys: |
           ${{ runner.os }}-maven-
+
     - uses: actions/download-artifact@v3
       with:
         name: artifacts
 
-    - name: Deploy to Sandbox
-      run: 
+    - name: Deploy to CloudHub
+      run: |
         artifactName=$(ls *.jar | head -1)
-        mvn deploy -e -DmuleDeploy -Dmule.artifact=$artifactName -s .maven/settings.xml -DskipTests -DskipDeploymentVerification="true"
+        mvn deploy -e -DmuleDeploy -Dmule.artifact=$artifactName -P${{ env.ENV_NAME }} -s .maven/settings.xml -DskipTests -DskipDeploymentVerification="true"

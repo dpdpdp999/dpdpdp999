@@ -16,12 +16,12 @@
 		<server>
             <id>anypoint-exchange-v3</id>
             <username>~~~Client~~~</username>
-            <password>10eeffa3f9184598b38dad7f43e024ab~?~0cD3022eCA514812Bc464a85D5635db6</password>
+            <password>${CA_CLIENT_ID}~?~${CA_CLIENT_SECRET}</password>
         </server>
 		<server>
             <id>ca.anypoint.credentials</id>
             <username>~~~Client~~~</username>
-            <password>10eeffa3f9184598b38dad7f43e024ab~?~0cD3022eCA514812Bc464a85D5635db6</password>
+            <password>${CA_CLIENT_ID}~?~${CA_CLIENT_SECRET}</password>
         </server>
  </servers>
 </settings>
