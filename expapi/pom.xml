@@ -15,7 +15,7 @@
         <mule.maven.plugin.version>4.4.0</mule.maven.plugin.version>
         <mule.businessGroupId>e22eea98-1cd3-49fd-9540-a8802b565500</mule.businessGroupId>
 		<mule.applicationName>exp-api-cicd-test</mule.applicationName>
-		<project.version>1.0.0</project.version>
+		<project.version>1.0.4</project.version>
     </properties>
 
     <build>
@@ -33,7 +33,7 @@
                 <configuration>
                     <cloudHub2Deployment>
                         <uri>https://anypoint.mulesoft.com</uri>
-			<muleVersion>${app.runtime}</muleVersion>
+			<muleVersion>4.4.0</muleVersion>
 			<provider>MC</provider>
 			<businessGroupId>${mule.businessGroupId}</businessGroupId>
             <applicationName>${mule.applicationName}</applicationName>
