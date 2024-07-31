@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 	<groupId>e22eea98-1cd3-49fd-9540-a8802b565500</groupId>
 	<artifactId>expapi</artifactId>
-	<version>1.0.5</version>
+	<version>1.0.4</version>
 	<packaging>mule-application</packaging>
 
     <name>expapi</name>
@@ -14,7 +14,7 @@
         <app.runtime>4.4.0</app.runtime>
         <mule.maven.plugin.version>4.0.0</mule.maven.plugin.version>
         <mule.businessGroupId>e22eea98-1cd3-49fd-9540-a8802b565500</mule.businessGroupId>
-		<project.version>1.0.5</project.version>
+		<project.version>1.0.4</project.version>
     </properties>
 
     <build>
@@ -136,8 +136,8 @@
             </activation>
             <properties>
                 <mule.environment>dev</mule.environment>
-		<mule.applicationName>exp-api-cicd-test-dev</mule.applicationName>
-		<project.version>${project.version}-SNAPSHOT</project.version>
+				<mule.applicationName>exp-api-cicd-test-dev</mule.applicationName>
+				<project.version>${project.version}-SNAPSHOT</project.version>
             </properties>
         </profile>
 
@@ -151,8 +151,8 @@
             </activation>
             <properties>
                 <mule.environment>qa</mule.environment>
-		<mule.applicationName>exp-api-cicd-test-qa</mule.applicationName>
-		<project.version>${project.version}-SNAPSHOT</project.version>
+				<mule.applicationName>exp-api-cicd-test-qa</mule.applicationName>
+				<project.version>${project.version}-SNAPSHOT</project.version>
             </properties>
         </profile>
 
@@ -166,8 +166,8 @@
             </activation>
             <properties>
                 <mule.environment>prod</mule.environment>
-		<mule.applicationName>exp-api-cicd-test</mule.applicationName>
-		<project.version>${project.version}</project.version>
+				<mule.applicationName>exp-api-cicd-test</mule.applicationName>
+				<project.version>${project.version}</project.version>
             </properties>
         </profile>
     </profiles>
