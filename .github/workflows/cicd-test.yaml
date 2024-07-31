@@ -125,10 +125,8 @@ jobs:
     - uses: actions/download-artifact@v3
       with:
         name: artifacts
-        
-    - name: Print working directory
-      run: echo "env : {{ env.ENV_NAME }}"
 
     - name: Deploy to CloudHub
       run: |
-        artifactName=$(ls *.jar | head -1) mvn -X deploy -e -DmuleDeploy -Dmule.artifact=$artifactName -P${{ env.ENV_NAME }} -s .maven/settings.xml -DskipTests -DskipDeploymentVerification="false"
+        artifactName=$(ls *.jar | head -1) 
+        mvn -X deploy -e -DmuleDeploy -Dmule.artifact=$artifactName -P${{ env.ENV_NAME }} -s .maven/settings.xml -DskipTests -DskipDeploymentVerification="true" --file pom.xml
