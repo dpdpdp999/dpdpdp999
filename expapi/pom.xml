@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>e22eea98-1cd3-49fd-9540-a8802b565500</groupId>
 	<artifactId>expapi</artifactId>
-	<version>1.0.8</version>
+	<version>1.0.9</version>
 	<packaging>mule-application</packaging>
 	<name>expapi</name>
 	<properties>
@@ -14,7 +14,7 @@
 		<app.runtime>4.4.0</app.runtime>
 		<mule.maven.plugin.version>4.0.0</mule.maven.plugin.version>
 		<mule.businessGroupId>e22eea98-1cd3-49fd-9540-a8802b565500</mule.businessGroupId>
-		<project.version>1.0.8</project.version>
+		<project.version>1.0.9</project.version>
 	</properties>
 	<build>
 		<plugins>
@@ -31,11 +31,11 @@
 				<configuration>
 					<cloudHub2Deployment>
 						<uri>https://anypoint.mulesoft.com</uri>
-						<muleVersion>4.4.0</muleVersion>
+						<muleVersion>${app.runtime}</muleVersion>
 						<provider>MC</provider>
-						<businessGroupId>e22eea98-1cd3-49fd-9540-a8802b565500</businessGroupId>
-						<applicationName>exp-api-cicd-test</applicationName>
-						<environment>dev</environment>
+						<businessGroupId>${mule.businessGroupId}</businessGroupId>
+						<applicationName>${mule.applicationName}</applicationName>
+						<environment>${mule.environment}</environment>
 						<target>Cloudhub-US-East-2</target>
 						<replicas>1</replicas>
 						<vCores>0.1</vCores>
