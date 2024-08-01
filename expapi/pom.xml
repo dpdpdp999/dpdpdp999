@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>e22eea98-1cd3-49fd-9540-a8802b565500</groupId>
 	<artifactId>expapi</artifactId>
-	<version>1.0.12</version>
+	<version>1.0.13</version>
 	<packaging>mule-application</packaging>
 	<name>expapi</name>
 	<properties>
@@ -12,7 +12,7 @@
 		<app.runtime>4.4.0</app.runtime>
 		<app.majorVersion>v1</app.majorVersion>
 		<mule.maven.plugin.version>4.0.0</mule.maven.plugin.version>
-		<project.version>1.0.12</project.version>
+		<project.version>1.0.13</project.version>
 		<munit.version>3.0.0</munit.version>
 	</properties>
 	<build>
@@ -22,6 +22,27 @@
 				<artifactId>maven-clean-plugin</artifactId>
 				<version>3.2.0</version>
 			</plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>1.8</version>
+            <executions>
+                <execution>
+                    <phase>validate</phase>
+                    <goals>
+                        <goal>run</goal>
+                    </goals>
+                    <configuration>
+                        <tasks>
+                            <echo>Active Profile: ${env}</echo>
+                            <echo>Mule Environment: ${mule.environment}</echo>
+                            <echo>Application Name: ${mule.applicationName}</echo>
+                            <echo>Project Version: ${project.version}</echo>
+                        </tasks>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
 			<plugin>
 				<groupId>org.mule.tools.maven</groupId>
 				<artifactId>mule-maven-plugin</artifactId>

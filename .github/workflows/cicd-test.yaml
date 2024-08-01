@@ -47,6 +47,9 @@ jobs:
     
     - name: Print effective-settings (optional)
       run: mvn help:effective-settings
+
+    - name: Check Active Maven Profiles
+      run: mvn help:active-profiles -P${{ env.ENV_NAME }}
     
     - name: Build with Maven
       run: mvn -B clean package -s .maven/settings.xml -DskipMunitTests -P${{ env.ENV_NAME }}
