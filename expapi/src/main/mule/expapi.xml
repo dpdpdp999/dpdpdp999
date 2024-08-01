@@ -9,16 +9,16 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 		<http:request-connection host="localhost" port="8081"/>
 	</http:request-config>
 	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="e55bf869-a368-47ae-a49c-3820ea9ba970" >
-		<http:listener-connection host="0.0.0.0" port="8089" />
+		<http:listener-connection host="${http.host}" port="${http.port}" />
 	</http:listener-config>
-	<configuration-properties doc:name="Configuration properties" doc:id="929e8de6-7097-4166-838c-2547cb5d6907" file="properties\${env}.yaml" />
+	<configuration-properties doc:name="Configuration properties" doc:id="929e8de6-7097-4166-838c-2547cb5d6907" file="properties/${env}.yaml" />
 	<flow name="expapiFlow" doc:id="1ad732a3-504b-46e8-bd40-26452197b2bb" >
 		<http:listener doc:name="Listener" doc:id="18623093-4cdf-466c-b3e1-8613decc93f5" config-ref="HTTP_Listener_config" path="/expapi">
 			<http:error-response >
 				<http:body ><![CDATA[#[payload]]]></http:body>
 			</http:error-response>
 		</http:listener>
-		<logger level="INFO" doc:name="Logger" doc:id="118aea1e-428c-4253-a85a-07843e7c0dd8" message="#[&quot;before calling prc api for env : &quot; ++ p('log.env')]"/>
+		<logger level="INFO" doc:name="Logger" doc:id="118aea1e-428c-4253-a85a-07843e7c0dd8" message="#[&quot;before calling prc api for env : &quot; ++ p('env')]"/>
 		<ee:transform doc:name="Transform Message" doc:id="24bc70fd-11e8-45b1-aa91-672c2a1cd330" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0

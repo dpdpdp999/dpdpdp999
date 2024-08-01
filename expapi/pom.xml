@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project
-	xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>e22eea98-1cd3-49fd-9540-a8802b565500</groupId>
 	<artifactId>expapi</artifactId>
-	<version>1.0.11</version>
+	<version>1.0.12</version>
 	<packaging>mule-application</packaging>
 	<name>expapi</name>
 	<properties>
@@ -14,7 +12,8 @@
 		<app.runtime>4.4.0</app.runtime>
 		<app.majorVersion>v1</app.majorVersion>
 		<mule.maven.plugin.version>4.0.0</mule.maven.plugin.version>
-		<project.version>1.0.11</project.version>
+		<project.version>1.0.12</project.version>
+		<munit.version>3.0.0</munit.version>
 	</properties>
 	<build>
 		<plugins>
@@ -47,7 +46,6 @@
 									<forwardSslSession>false</forwardSslSession>
 								</inbound>
 							</http>
-							<generateDefaultPublicUrl>true</generateDefaultPublicUrl>
 						</deploymentSettings>
 						<server>ca.anypoint.credentials</server>
 						<integrations>
@@ -72,6 +70,29 @@
 					<classifier>mule-application</classifier>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>com.mulesoft.munit.tools</groupId>
+				<artifactId>munit-maven-plugin</artifactId>
+				<version>${munit.version}</version>
+				<executions>
+					<execution>
+						<id>test</id>
+						<phase>test</phase>
+						<goals>
+							<goal>test</goal>
+							<goal>coverage-report</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<coverage>
+						<runCoverage>true</runCoverage>
+						<formats>
+							<format>html</format>
+						</formats>
+					</coverage>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 	<distributionManagement>
@@ -94,6 +115,26 @@
 			<artifactId>mule-sockets-connector</artifactId>
 			<version>1.2.3</version>
 			<classifier>mule-plugin</classifier>
+		</dependency>
+		<dependency>
+			<groupId>com.mulesoft.munit</groupId>
+			<artifactId>munit-runner</artifactId>
+			<version>3.0.0</version>
+			<classifier>mule-plugin</classifier>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.mulesoft.munit</groupId>
+			<artifactId>munit-tools</artifactId>
+			<version>3.0.0</version>
+			<classifier>mule-plugin</classifier>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mule.weave</groupId>
+			<artifactId>assertions</artifactId>
+			<version>1.2.1</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<repositories>

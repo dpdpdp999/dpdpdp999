@@ -1,2 +1,5 @@
-log:
-  env: qa
+env: qa
+
+http:
+  host: "0.0.0.0"
+  port: "8081"
