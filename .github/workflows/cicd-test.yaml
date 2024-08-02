@@ -100,7 +100,7 @@ jobs:
         
     - name: Upload to Exchange
       run: |
-        artifactName=$(ls *.jar | head -1) mvn deploy -s .maven/settings.xml -Dmule.artifact=$artifactName -DskipMunitTests   
+        artifactName=$(ls *.jar | head -1) mvn deploy -s .maven/settings.xml -P${{ env.ENV_NAME }} -Dmule.artifact=$artifactName -DskipMunitTests   
         
   deploy:
     needs: upload
@@ -132,4 +132,4 @@ jobs:
     - name: Deploy to CloudHub
       run: |
         artifactName=$(ls *.jar | head -1) 
-        mvn -X deploy -e -DmuleDeploy -Dmule.artifact=$artifactName -s .maven/settings.xml -DskipMunitTests -DskipDeploymentVerification="true" --file=pom.xml
+        mvn -X deploy -e -DmuleDeploy -Dmule.artifact=$artifactName -s .maven/settings.xml  -DskipMunitTests -DskipDeploymentVerification="true" --file=pom.xml
