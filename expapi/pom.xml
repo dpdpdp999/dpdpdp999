@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>e22eea98-1cd3-49fd-9540-a8802b565500</groupId>
 	<artifactId>expapi</artifactId>
-	<version>1.0.27</version>
+	<version>1.0.28</version>
 	<packaging>mule-application</packaging>
 	<name>expapi</name>
 	<properties>
@@ -59,6 +59,8 @@
 						<replicas>1</replicas>
 						<vCores>0.1</vCores>
 						<skipDeploymentVerification>true</skipDeploymentVerification>
+						<properties>
+							<env>dev</env></properties>
 						<deploymentSettings>
 							<http>
 								<inbound>
