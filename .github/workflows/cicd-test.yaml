@@ -33,7 +33,7 @@ jobs:
       uses: actions/checkout@v3
     
     - name: Cache dependencies
-      uses: actions/cache@v1
+      uses: actions/cache@v3
       with:
         path: ~/.m2/repository
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -118,7 +118,7 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Cache dependencies
-      uses: actions/cache@v1
+      uses: actions/cache@v3
       with:
         path: ~/.m2/repository
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -132,4 +132,4 @@ jobs:
     - name: Deploy to CloudHub
       run: |
         artifactName=$(ls *.jar | head -1) 
-        mvn -X deploy -e -DmuleDeploy -Dmule.artifact=$artifactName  -P${{ env.ENV_NAME }} -s .maven/settings.xml  -DskipMunitTests -DskipDeploymentVerification="true" --file=pom.xml
+        mvn -X deploy -e -DmuleDeploy -Dmule.artifact=$artifactName  -P${{ env.ENV_NAME }} -Denv=${{ vars.ENV }} -s .maven/settings.xml -Danypoint.platform.client_id=$ANYPOINT_PLATFORM_CLIENT_ID -Danypoint.platform.client_secret=$ANYPOINT_PLATFORM_CLIENT_SECRET  -DskipMunitTests -DskipDeploymentVerification="true" --file=pom.xml
