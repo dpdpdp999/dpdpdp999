@@ -99,8 +99,8 @@ jobs:
     env:
       CA_CLIENT_ID: ${{ secrets.CA_CLIENT_ID }}
       CA_CLIENT_SECRET: ${{ secrets.CA_CLIENT_SECRET }}
-      ANYPOINT_PLATFORM_CLIENT_ID: ${{ secrets['ANYPOINT_PLATFORM_CLIENT_ID_' + (github.event_name == 'pull_request' && github.base_ref || github.ref_name).toUpperCase()] }}
-      ANYPOINT_PLATFORM_CLIENT_SECRET: ${{ secrets['ANYPOINT_PLATFORM_CLIENT_SECRET_' + (github.event_name == 'pull_request' && github.base_ref || github.ref_name).toUpperCase()] }}
+      ANYPOINT_PLATFORM_CLIENT_ID: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID }}
+      ANYPOINT_PLATFORM_CLIENT_SECRET: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET }}
       ENV_NAME: ${{ github.event_name == 'pull_request' && github.base_ref || github.ref_name }}
 
     steps:
