@@ -132,4 +132,4 @@ jobs:
     - name: Deploy to CloudHub
       run: |
         artifactName=$(ls *.jar | head -1) 
-        mvn -X deploy -e -DmuleDeploy -Dmule.artifact=$artifactName  -P${{ env.ENV_NAME }} -Denv={{ env.ENV_NAME }} -s .maven/settings.xml  -DskipMunitTests -DskipDeploymentVerification="true" --file=pom.xml
+        mvn -X deploy -e -DmuleDeploy -Dmule.artifact=$artifactName  -P${{ env.ENV_NAME }} -s .maven/settings.xml  -DskipMunitTests -DskipDeploymentVerification="true" --file=pom.xml
