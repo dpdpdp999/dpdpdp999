@@ -100,8 +100,8 @@ jobs:
     env:
       CA_CLIENT_ID: ${{ secrets.CA_CLIENT_ID }}
       CA_CLIENT_SECRET: ${{ secrets.CA_CLIENT_SECRET }}
-      ANYPOINT_PLATFORM_CLIENT_ID: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID }}
-      ANYPOINT_PLATFORM_CLIENT_SECRET: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET }}
+      ANYPOINT_PLATFORM_CLIENT_ID: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID_DEV }}
+      ANYPOINT_PLATFORM_CLIENT_SECRET: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET_DEV }}
       ENV_NAME: ${{ github.event_name == 'pull_request' && github.base_ref || github.ref_name }}
 
     steps:
@@ -120,14 +120,6 @@ jobs:
     - uses: actions/download-artifact@v3
       with:
         name: artifacts
-        
-    - name: Print environment details
-      run: |
-        echo "Event Name: ${{ github.event_name }}"
-        echo "Base Ref: ${{ github.base_ref }}"
-        echo "Ref Name: ${{ github.ref_name }}"
-        echo "Client ID Secret: ANYPOINT_PLATFORM_CLIENT_ID_${{ (github.event_name == 'pull_request' && github.base_ref || github.ref_name).toUpperCase() }}"
-        echo "Client Secret Secret: ANYPOINT_PLATFORM_CLIENT_SECRET_${{ (github.event_name == 'pull_request' && github.base_ref || github.ref_name).toUpperCase() }}"
 
     - name: Deploy to CloudHub
       run: |
