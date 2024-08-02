@@ -34,7 +34,7 @@ output application/json
 							<error-handler>
 								
 																						<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="23f4ba4b-078b-4ee0-9ac0-40bc02abc40b" type="ANY" when='#[(error.muleMessage.payload.error_responses.source_type[0&#93; == "ERP") or (error.muleMessage.payload.error_responses.source_type[0&#93; == "MULE")&#93;'>
-							<logger level="INFO" doc:name="Logger" doc:id="f7a84a43-491a-482a-8926-639fb57c14b6" message="Error retrieved from process api" />
+							<logger level="INFO" doc:name="Logger" doc:id="f7a84a43-491a-482a-8926-639fb57c14b6" message="Error retrieved from process app" />
 							<ee:transform doc:name="Transform Message" doc:id="8e6365e8-8a80-42ef-afe8-77cd647a71bd">
 								<ee:message>
 									<ee:set-payload><![CDATA[%dw 2.0
