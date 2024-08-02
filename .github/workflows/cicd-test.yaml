@@ -44,12 +44,15 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
+    
+    - name: Print effective-settings (optional)
+      run: mvn help:effective-settings
 
     - name: Check Active Maven Profiles
       run: mvn help:active-profiles -P${{ env.ENV_NAME }}
     
     - name: Build with Maven
-      run: mvn -B clean package -s .maven/settings.xml -DskipMunitTests -Denv=${{ env.ENV_NAME }} -P${{ env.ENV_NAME }}
+      run: mvn -B clean package -s .maven/settings.xml -DskipMunitTests -P${{ env.ENV_NAME }} -Denv=${{ env.ENV_NAME }}
       
     - name: Stamp artifact file name with commit hash
       run: |
@@ -88,8 +91,7 @@ jobs:
         
     - name: Upload to Exchange
       run: |
-        artifactName=$(ls *.jar | head -1) 
-        mvn deploy -s .maven/settings.xml -Dmule.artifact=$artifactName -DskipMunitTests   
+        artifactName=$(ls *.jar | head -1) mvn deploy -s .maven/settings.xml -Dmule.artifact=$artifactName -DskipMunitTests   
         
   deploy:
     needs: upload
