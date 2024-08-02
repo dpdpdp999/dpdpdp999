@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>e22eea98-1cd3-49fd-9540-a8802b565500</groupId>
 	<artifactId>expapi</artifactId>
-	<version>1.0.20</version>
+	<version>1.0.21</version>
 	<packaging>mule-application</packaging>
 	<name>expapi</name>
 	<properties>
