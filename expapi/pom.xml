@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>e22eea98-1cd3-49fd-9540-a8802b565500</groupId>
 	<artifactId>expapi</artifactId>
-	<version>1.0.28</version>
+	<version>1.0.28${version.suffix}</version>
 	<packaging>mule-application</packaging>
 	<name>expapi</name>
 	<properties>
@@ -196,7 +196,7 @@
 			<properties>
 				<mule.environment>dev</mule.environment>
 				<mule.applicationName>${project.artifactId}-dev</mule.applicationName>
-				<project.version>${project.version}-SNAPSHOT</project.version>
+				<version.suffix>-SNAPSHOT</project.version>
 			</properties>
 		</profile>
 		<profile>
