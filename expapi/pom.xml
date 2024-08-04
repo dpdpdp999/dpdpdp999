@@ -196,7 +196,7 @@
 			<properties>
 				<mule.environment>dev</mule.environment>
 				<mule.applicationName>${project.artifactId}-dev</mule.applicationName>
-				<version.suffix>-SNAPSHOT</project.version>
+				<version.suffix>-SNAPSHOT</version.suffix>
 			</properties>
 		</profile>
 		<profile>
