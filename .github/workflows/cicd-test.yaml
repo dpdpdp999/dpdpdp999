@@ -92,7 +92,16 @@ jobs:
     - uses: actions/download-artifact@v3
       with:
         name: artifacts
-        
+
+    - name: List downloaded artifacts
+    run: |
+    echo "Listing downloaded artifacts..."
+    ls -l *.jar
+
+    - name: Log artifact name
+    run: |
+    echo "Artifact Name: $(ls *.jar | head -1)"        
+    
     - name: Upload to Exchange
       run: |
         artifactName=$(ls *.jar | head -1) mvn deploy -s .maven/settings.xml -Dmule.artifact=$artifactName -DskipMunitTests   
