@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>e22eea98-1cd3-49fd-9540-a8802b565500</groupId>
 	<artifactId>expapi${mule.applicationName}</artifactId>
-	<version>1.0.39${version.suffix}</version>
+	<version>1.0.49${version.suffix}</version>
 	<packaging>mule-application</packaging>
 	<name>expapi</name>
 	<properties>
@@ -94,7 +94,7 @@
 					<classifier>mule-application</classifier>
 				</configuration>
 			</plugin>
-		<!--	<plugin>
+			<plugin>
 				<groupId>com.mulesoft.munit.tools</groupId>
 				<artifactId>munit-maven-plugin</artifactId>
 				<version>${munit.version}</version>
@@ -116,7 +116,7 @@
 						</formats>
 					</coverage>
 				</configuration>
-			</plugin> -->
+			</plugin> 
 		</plugins>
 	</build>
 	<distributionManagement>
