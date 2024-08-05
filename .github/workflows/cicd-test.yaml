@@ -51,6 +51,9 @@ jobs:
 
     - name: Check Active Maven Profiles
       run: mvn help:active-profiles -P${{ env.ENV_NAME }}
+
+    - name: Check pom data
+      run: mvn help:effective-pom -P${{ env.ENV_NAME }}
     
     - name: Build with Maven
       run: mvn -B clean package -s .maven/settings.xml -DskipMunitTests -P${{ env.ENV_NAME }} -Denv=${{ env.ENV_NAME }}
@@ -59,7 +62,8 @@ jobs:
       run: |
         artifactName1=$(ls target/*.jar | head -1)
         commitHash=$(git rev-parse --short "$GITHUB_SHA")
-        artifactName2=$(ls target/*.jar | head -1 | sed "s/.jar/-$commitHash.jar/g")
+        envName=${{ env.ENV_NAME }}
+        artifactName2=$(echo $artifactName1 | sed "s/.jar/-${envName}-$commitHash.jar/g")
         mv $artifactName1 $artifactName2
     
     - name: Upload artifact in build
