@@ -77,6 +77,7 @@ jobs:
     env:
       CA_CLIENT_ID: ${{ secrets.CA_CLIENT_ID }}
       CA_CLIENT_SECRET: ${{ secrets.CA_CLIENT_SECRET }}
+      ENV_NAME: ${{ github.event_name == 'pull_request' && github.base_ref || github.ref_name }}
 
     steps:
     
@@ -92,13 +93,10 @@ jobs:
     - uses: actions/download-artifact@v3
       with:
         name: artifacts
-
-    - name: Log artifact name
-      run:  echo "Artifact name: $(ls *.jar | head -1)"
     
     - name: Upload to Exchange
       run: |
-        artifactName=$(ls *.jar | head -1) mvn deploy -s .maven/settings.xml -Dmule.artifact=$artifactName -DskipMunitTests   
+        artifactName=$(ls *.jar | head -1) mvn deploy -s .maven/settings.xml -Dmule.artifact=$artifactName -DskipMunitTests -P${{ env.ENV_NAME }}   
         
   deploy:
     needs: upload

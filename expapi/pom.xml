@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>e22eea98-1cd3-49fd-9540-a8802b565500</groupId>
 	<artifactId>expapi</artifactId>
-	<version>1.0.34${version.suffix}</version>
+	<version>1.0.32${version.suffix}</version>
 	<packaging>mule-application</packaging>
 	<name>expapi</name>
 	<properties>
@@ -13,6 +13,7 @@
 		<app.majorVersion>v1</app.majorVersion>
 		<mule.maven.plugin.version>4.0.0</mule.maven.plugin.version>
 		<munit.version>2.3.9</munit.version>
+		<version.suffix></version.suffix>
 	</properties>
 	<build>
 		<plugins>
