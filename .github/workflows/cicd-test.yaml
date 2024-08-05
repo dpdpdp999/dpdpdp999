@@ -94,7 +94,7 @@ jobs:
         name: artifacts
 
     - name: Log artifact name
-      run:  $(ls *.jar | head -1)        
+      run:  echo "Artifact name: $(ls *.jar | head -1)"
     
     - name: Upload to Exchange
       run: |
