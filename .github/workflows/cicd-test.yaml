@@ -8,7 +8,6 @@ on:
       - 'expapi/**'
   pull_request:
     branches:
-      - dev
       - qa
       - prod
     paths:
