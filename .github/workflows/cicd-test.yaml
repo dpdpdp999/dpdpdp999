@@ -121,7 +121,6 @@ jobs:
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
         restore-keys: |
           ${{ runner.os }}-maven-
-
     - uses: actions/download-artifact@v3
       with:
         name: artifacts
@@ -130,3 +129,4 @@ jobs:
       run: |
         artifactName=$(ls *.jar | head -1) 
         mvn -X deploy -e -DmuleDeploy -Dmule.artifact=$artifactName -Denv=${{ env.ENV_NAME }} -P${{ env.ENV_NAME }} -s .maven/settings.xml -Danypoint.platform.client_id=env.$ANYPOINT_PLATFORM_CLIENT_ID -Danypoint.platform.client_secret=env.$ANYPOINT_PLATFORM_CLIENT_SECRET  -DskipMunitTests -DskipDeploymentVerification="true" --file=pom.xml
+corrected
