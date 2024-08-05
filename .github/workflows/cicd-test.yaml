@@ -92,12 +92,9 @@ jobs:
     - uses: actions/download-artifact@v3
       with:
         name: artifacts
-    
-    - name: List downloaded artifacts
-      run: ls -l *.jar
 
     - name: Log artifact name
-      run: echo "Artifact Name: $(ls *.jar | head -1)"        
+      run:  $(ls *.jar | head -1)        
     
     - name: Upload to Exchange
       run: |
