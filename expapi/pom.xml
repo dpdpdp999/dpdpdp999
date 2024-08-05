@@ -54,7 +54,7 @@
 						<muleVersion>${app.runtime}</muleVersion>
 						<provider>MC</provider>
 						<businessGroupId>${project.groupId}</businessGroupId>
-						<applicationName>${artifactId}</applicationName>
+						<applicationName>${project.artifactId}</applicationName>
 						<environment>${mule.environment}</environment>
 						<target>Cloudhub-US-East-2</target>
 						<replicas>1</replicas>
