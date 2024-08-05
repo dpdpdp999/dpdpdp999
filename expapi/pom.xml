@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>e22eea98-1cd3-49fd-9540-a8802b565500</groupId>
 	<artifactId>expapi${mule.applicationName}</artifactId>
-	<version>1.0.34${version.suffix}</version>
+	<version>1.0.35${version.suffix}</version>
 	<packaging>mule-application</packaging>
 	<name>expapi</name>
 	<properties>
@@ -62,7 +62,7 @@
 						<vCores>0.1</vCores>
 						<skipDeploymentVerification>true</skipDeploymentVerification>
 						<properties>
-							<env>dev</env></properties>
+							<env></env></properties>
 						<deploymentSettings>
 							<http>
 								<inbound>
