@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>e22eea98-1cd3-49fd-9540-a8802b565500</groupId>
-	<artifactId>expapi${mule.applicationName}</artifactId>
+	<artifactId>expapi</artifactId>
 	<version>1.0.35${version.suffix}</version>
 	<packaging>mule-application</packaging>
 	<name>expapi</name>
@@ -14,7 +14,6 @@
 		<mule.maven.plugin.version>4.0.0</mule.maven.plugin.version>
 		<munit.version>2.3.9</munit.version>
 		<version.suffix></version.suffix>
-		<mule.applicationName></mule.applicationName>
 	</properties>
 	<build>
 		<plugins>
@@ -55,7 +54,7 @@
 						<muleVersion>${app.runtime}</muleVersion>
 						<provider>MC</provider>
 						<businessGroupId>${project.groupId}</businessGroupId>
-						<applicationName>${project.artifactId}</applicationName>
+						<applicationName>${mule.applicationName}</applicationName>
 						<environment>${mule.environment}</environment>
 						<target>Cloudhub-US-East-2</target>
 						<replicas>1</replicas>
@@ -197,7 +196,7 @@
 			</activation>
 			<properties>
 				<mule.environment>dev</mule.environment>
-				<mule.applicationName>-dev</mule.applicationName>
+				<mule.applicationName>${project.artifactId}-dev</mule.applicationName>
 				<version.suffix>-SNAPSHOT</version.suffix>
 			</properties>
 		</profile>
@@ -211,7 +210,7 @@
 			</activation>
 			<properties>
 				<mule.environment>qa</mule.environment>
-				<mule.applicationName>-qa</mule.applicationName>
+				<mule.applicationName>${project.artifactId}-qa</mule.applicationName>
 				<version.suffix>-SNAPSHOT</version.suffix>
 			</properties>
 		</profile>
@@ -225,7 +224,7 @@
 			</activation>
 			<properties>
 				<mule.environment>prod</mule.environment>
-				<mule.applicationName></mule.applicationName>
+				<mule.applicationName>${project.artifactId}</mule.applicationName>
 				<version.suffix></version.suffix>
 			</properties>
 		</profile>
