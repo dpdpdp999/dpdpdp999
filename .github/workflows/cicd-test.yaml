@@ -8,6 +8,7 @@ on:
       - 'expapi/**'
   pull_request:
     branches:
+      - dev
       - qa
       - prod
     paths:
@@ -55,7 +56,7 @@ jobs:
       run: mvn help:effective-pom -P${{ env.ENV_NAME }}
     
     - name: Build with Maven
-      run: mvn -B clean package -s .maven/settings.xml -DskipMunitTests -P${{ env.ENV_NAME }} -Denv=${{ env.ENV_NAME }}
+      run: mvn -B clean package -s .maven/settings.xml -P${{ env.ENV_NAME }} -Denv=${{ env.ENV_NAME }}
       
     - name: Stamp artifact file name with commit hash
       run: |
@@ -96,7 +97,7 @@ jobs:
     
     - name: Upload to Exchange
       run: |
-        artifactName=$(ls *.jar | head -1) mvn deploy -s .maven/settings.xml -Dmule.artifact=$artifactName -DskipMunitTests -P${{ env.ENV_NAME }}   
+        artifactName=$(ls *.jar | head -1) mvn deploy -s .maven/settings.xml -Dmule.artifact=$artifactName -P${{ env.ENV_NAME }}   
         
   deploy:
     needs: upload
@@ -143,4 +144,4 @@ jobs:
     - name: Deploy to CloudHub
       run: |
         artifactName=$(ls *.jar | head -1) 
-        mvn -X deploy -e -DmuleDeploy -Dmule.artifact=$artifactName -Denv=${{ env.ENV_NAME }} -P${{ env.ENV_NAME }} -s .maven/settings.xml -Danypoint.platform.client_id=${{ env.ANYPOINT_PLATFORM_CLIENT_ID }} -Danypoint.platform.client_secret=${{ env.ANYPOINT_PLATFORM_CLIENT_SECRET }} -DskipMunitTests -DskipDeploymentVerification="true" --file=pom.xml
+        mvn -X deploy -e -DmuleDeploy -Dmule.artifact=$artifactName -Denv=${{ env.ENV_NAME }} -P${{ env.ENV_NAME }} -s .maven/settings.xml -Danypoint.platform.client_id=${{ env.ANYPOINT_PLATFORM_CLIENT_ID }} -Danypoint.platform.client_secret=${{ env.ANYPOINT_PLATFORM_CLIENT_SECRET }} -DskipDeploymentVerification="true" --file=pom.xml

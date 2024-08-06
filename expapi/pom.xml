@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>e22eea98-1cd3-49fd-9540-a8802b565500</groupId>
 	<artifactId>expapi${mule.applicationName}</artifactId>
-	<version>1.0.51${version.suffix}</version>
+	<version>1.0.52${version.suffix}</version>
 	<packaging>mule-application</packaging>
 	<name>expapi</name>
 	<properties>
@@ -94,29 +94,34 @@
 					<classifier>mule-application</classifier>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>com.mulesoft.munit.tools</groupId>
-				<artifactId>munit-maven-plugin</artifactId>
-				<version>${munit.version}</version>
-				<executions>
-					<execution>
-						<id>test</id>
-						<phase>test</phase>
-						<goals>
-							<goal>test</goal>
-							<goal>coverage-report</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<coverage>
-						<runCoverage>true</runCoverage>
-						<formats>
-							<format>html</format>
-						</formats>
-					</coverage>
-				</configuration>
-			</plugin> 
+<plugin>
+<groupId>com.mulesoft.munit.tools</groupId>
+<artifactId>munit-maven-plugin</artifactId>
+<version>${munit.version}</version>
+<executions>
+<execution>
+<id>test</id>
+<phase>test</phase>
+<goals>
+<goal>test</goal>
+<goal>coverage-report</goal>
+</goals>
+</execution>
+</executions>
+<configuration>
+<coverage>
+<runCoverage>true</runCoverage>
+<failBuild>true</failBuild>
+ 
+            <requiredApplicationCoverage>80</requiredApplicationCoverage>
+<requiredResourceCoverage>50</requiredResourceCoverage>
+<requiredFlowCoverage>50</requiredFlowCoverage>
+<formats>
+<format>html</format>
+</formats>
+</coverage>
+</configuration>
+</plugin>
 		</plugins>
 	</build>
 	<distributionManagement>
