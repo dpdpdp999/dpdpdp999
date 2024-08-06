@@ -105,8 +105,8 @@ jobs:
       CA_CLIENT_ID: ${{ secrets.CA_CLIENT_ID }}
       CA_CLIENT_SECRET: ${{ secrets.CA_CLIENT_SECRET }}
       ENV_NAME: ${{ github.event_name == 'pull_request' && github.base_ref || github.ref_name }}      
-      ANYPOINT_PLATFORM_CLIENT_ID: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID_DEV }}
-      ANYPOINT_PLATFORM_CLIENT_SECRET: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET_DEV }}
+      ANYPOINT_PLATFORM_CLIENT_ID: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID_QA }}
+      ANYPOINT_PLATFORM_CLIENT_SECRET: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET_QA }}
 
 
     steps:
