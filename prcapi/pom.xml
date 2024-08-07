@@ -3,8 +3,8 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>e22eea98-1cd3-49fd-9540-a8802b565500</groupId>
-	<artifactId>prcapi</artifactId>
-	<version>1.0.2</version>
+	<artifactId>expapi${mule.applicationName}</artifactId>
+	<version>1.0.3${version.suffix}</version>
 	<packaging>mule-application</packaging>
 
 	<name>prcapi</name>
@@ -14,7 +14,11 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<app.runtime>4.4.0</app.runtime>
+		<app.majorVersion>v1</app.majorVersion>
 		<mule.maven.plugin.version>4.0.0</mule.maven.plugin.version>
+		<munit.version>2.3.14</munit.version>
+		<version.suffix></version.suffix>
+		<mule.applicationName></mule.applicationName>
 	</properties>
 
 	<build>
@@ -24,6 +28,27 @@
 				<artifactId>maven-clean-plugin</artifactId>
 				<version>3.2.0</version>
 			</plugin>
+   <!--     <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>1.9</version>
+            <executions>
+                <execution>
+                    <phase>validate</phase>
+                    <goals>
+                        <goal>run</goal>
+                    </goals>
+                    <configuration>
+                        <tasks>
+                            <echo>Active Profile: ${env}</echo>
+                            <echo>Mule Environment: ${mule.environment}</echo>
+                            <echo>Application Name: ${mule.applicationName}</echo>
+                            <echo>Project Version: ${project.version}</echo>
+                        </tasks>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>  -->
 			<plugin>
 				<groupId>org.mule.tools.maven</groupId>
 				<artifactId>mule-maven-plugin</artifactId>
@@ -32,16 +57,18 @@
 				  <configuration>
 					<cloudhub2Deployment>
 						<uri>https://anypoint.mulesoft.com</uri>
-						<muleVersion>4.4.0</muleVersion>
+						<muleVersion>${app.runtime}</muleVersion>
 						<provider>MC</provider>
-						<businessGroupId>e22eea98-1cd3-49fd-9540-a8802b565500</businessGroupId>
-						<applicationName>prc-api-cicd-test</applicationName>
-						<environment>Sandbox</environment>
+						<businessGroupId>${project.groupId}</businessGroupId>
+						<applicationName>${project.artifactId}</applicationName>
+						<environment>${mule.environment}</environment>
 						<target>Cloudhub-US-East-2</target>
 						
 						<replicas>1</replicas>
 						<vCores>0.1</vCores>
 						<skipDeploymentVerification>true</skipDeploymentVerification>
+						<properties>
+							<env>${mule.environment}</env></properties>
 						<deploymentSettings>
 							<http>
 								<inbound>
@@ -75,15 +102,43 @@
 					<classifier>mule-application</classifier>
 				</configuration>
 			</plugin>
+<!-- <plugin>
+<groupId>com.mulesoft.munit.tools</groupId>
+<artifactId>munit-maven-plugin</artifactId>
+<version>${munit.version}</version>
+<executions>
+<execution>
+<id>test</id>
+<phase>test</phase>
+<goals>
+<goal>test</goal>
+<goal>coverage-report</goal>
+</goals>
+</execution>
+</executions>
+<configuration>
+<coverage>
+<runCoverage>true</runCoverage>
+<failBuild>true</failBuild>
+ 
+            <requiredApplicationCoverage>80</requiredApplicationCoverage>
+<requiredResourceCoverage>50</requiredResourceCoverage>
+<requiredFlowCoverage>50</requiredFlowCoverage>
+<formats>
+<format>html</format>
+</formats>
+</coverage>
+</configuration>
+</plugin> -->
 		</plugins>
 	</build>
 	<distributionManagement>
-	  <repository>
-		<id>ca.anypoint.credentials</id>
-		<name>Corporate Repository</name>
-		<url>https://maven.anypoint.mulesoft.com/api/v2/organizations/${project.groupId}/maven</url>
-		<layout>default</layout>
-	  </repository>
+		<repository>
+			<id>ca.anypoint.credentials</id>
+			<name>Corporate Repository</name>
+			<url>https://maven.anypoint.mulesoft.com/api/v2/organizations/${project.groupId}/maven</url>
+			<layout>default</layout>
+		</repository>
 	</distributionManagement>
 
 	<dependencies>
@@ -98,6 +153,37 @@
 			<artifactId>mule-sockets-connector</artifactId>
 			<version>1.2.3</version>
 			<classifier>mule-plugin</classifier>
+		</dependency>
+		<dependency>
+			<groupId>com.mulesoft.munit</groupId>
+			<artifactId>munit-runner</artifactId>
+			<version>2.3.14</version>
+			<classifier>mule-plugin</classifier>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.mulesoft.munit</groupId>
+			<artifactId>munit-tools</artifactId>
+			<version>2.3.14</version>
+			<classifier>mule-plugin</classifier>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mule.weave</groupId>
+			<artifactId>assertions</artifactId>
+			<version>1.0.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+
+			<groupId>com.mulesoft.munit</groupId>
+
+			<artifactId>munit-remote</artifactId>
+
+			<version>${munit.version}</version>
+
+			<scope>test</scope>
+
 		</dependency>
 	</dependencies>
 
@@ -127,5 +213,48 @@
 			</snapshots>
 		</pluginRepository>
 	</pluginRepositories>
-
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<activation>
+				<property>
+					<name>env</name>
+					<value>dev</value>
+				</property>
+			</activation>
+			<properties>
+				<mule.environment>dev</mule.environment>
+				<mule.applicationName>-dev</mule.applicationName>
+				<version.suffix>-SNAPSHOT</version.suffix>
+			</properties>
+		</profile>
+		<profile>
+			<id>qa</id>
+			<activation>
+				<property>
+					<name>env</name>
+					<value>qa</value>
+				</property>
+			</activation>
+			<properties>
+				<mule.environment>qa</mule.environment>
+				<mule.applicationName>-qa</mule.applicationName>
+				<version.suffix>-SNAPSHOT</version.suffix>
+			</properties>
+		</profile>
+		<profile>
+			<id>prod</id>
+			<activation>
+				<property>
+					<name>env</name>
+					<value>prod</value>
+				</property>
+			</activation>
+			<properties>
+				<mule.environment>prod</mule.environment>
+				<mule.applicationName></mule.applicationName>
+				<version.suffix></version.suffix>
+			</properties>
+		</profile>
+	</profiles>
 </project>
