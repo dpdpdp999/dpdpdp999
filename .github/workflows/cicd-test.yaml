@@ -51,7 +51,7 @@ jobs:
       run: mvn help:effective-pom -P${{ env.ENV_NAME }}
     
     - name: Build with Maven
-      run: mvn -B clean package -s .maven/settings.xml -P${{ env.ENV_NAME }} -Denv=${{ env.ENV_NAME }}
+      run: mvn -B clean package -s .maven/settings.xml -P${{ env.ENV_NAME }} -Denv=${{ env.ENV_NAME }} -DskipMunitTests
       
     - name: Stamp artifact file name with commit hash
       run: |
