@@ -1,11 +1,6 @@
 name: exp-api-cicd-test
 
 on:
-  push:
-    branches:
-      - dev
-    paths:
-      - 'expapi/**'
   pull_request:
     branches:
       - dev
