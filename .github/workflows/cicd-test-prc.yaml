@@ -1,0 +1,146 @@
+
+
+name: prc-api-cicd-test
+on:
+
+  pull_request:
+    branches: 
+       - dev
+       - qa
+       - prod
+    paths:
+       - 'prcapi/**'
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: prcapi
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      CA_CLIENT_ID: ${{ secrets.CA_CLIENT_ID }}
+      CA_CLIENT_SECRET: ${{ secrets.CA_CLIENT_SECRET }}
+      ENV_NAME: ${{ github.event_name == 'pull_request' && github.base_ref || github.ref_name }}
+
+    steps:
+    
+    - name: Checkout this repo
+      uses: actions/checkout@v3
+    
+    - name: Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+    
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+           
+    
+    - name: Print effective-settings (optional)
+      run: mvn help:effective-settings
+
+    - name: Check Active Maven Profiles
+      run: mvn help:active-profiles -P${{ env.ENV_NAME }}
+
+    - name: Check pom data
+      run: mvn help:effective-pom -P${{ env.ENV_NAME }}
+    
+    - name: Build with Maven
+      run: mvn -B clean package -s .maven/settings.xml -P${{ env.ENV_NAME }} -Denv=${{ env.ENV_NAME }} -DskipMunitTests
+      
+    - name: Stamp artifact file name with commit hash
+      run: |
+        artifactName1=$(ls target/*.jar | head -1)
+        commitHash=$(git rev-parse --short "$GITHUB_SHA")
+        envName=${{ env.ENV_NAME }}
+        artifactName2=$(echo $artifactName1 | sed "s/.jar/-${envName}-$commitHash.jar/g")
+        mv $artifactName1 $artifactName2
+    
+    - name: Upload artifact in build
+      uses: actions/upload-artifact@v3
+      with:
+          name: artifacts
+          path: prcapi/target/*.jar
+          
+  upload:
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      CA_CLIENT_ID: ${{ secrets.CA_CLIENT_ID }}
+      CA_CLIENT_SECRET: ${{ secrets.CA_CLIENT_SECRET }}
+      ENV_NAME: ${{ github.event_name == 'pull_request' && github.base_ref || github.ref_name }}
+
+    steps:    
+    
+    - uses: actions/checkout@v3
+    
+    - uses: actions/cache@v3
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+    
+    - uses: actions/download-artifact@v3
+      with:
+        name: artifacts 
+    
+    - name: pwd
+      run: pwd
+        
+    - name: Upload to Exchange
+      run: |
+        artifactName=$(ls *.jar | head -1) mvn deploy -s .maven/settings.xml -Dmule.artifact=$artifactName -P${{ env.ENV_NAME }}   
+        
+  deploy:
+    needs: upload
+    runs-on: ubuntu-latest
+    env:
+      CA_CLIENT_ID: ${{ secrets.CA_CLIENT_ID }}
+      CA_CLIENT_SECRET: ${{ secrets.CA_CLIENT_SECRET }}
+      ENV_NAME: ${{ github.event_name == 'pull_request' && github.base_ref || github.ref_name }}      
+      ANYPOINT_PLATFORM_CLIENT_ID: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID_QA }}
+      ANYPOINT_PLATFORM_CLIENT_SECRET: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET_QA }}
+
+
+    steps:
+  
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    - name: Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+    - uses: actions/download-artifact@v3
+      with:
+        name: artifacts
+    - name: Set Anypoint Platform Secrets
+      id: set_secrets
+      run: |
+        if [ "${{ env.ENV_NAME }}" = "dev" ]; then
+          echo "ANYPOINT_PLATFORM_CLIENT_ID=${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID_DEV }}" >> $GITHUB_ENV
+          echo "ANYPOINT_PLATFORM_CLIENT_SECRET=${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET_DEV }}" >> $GITHUB_ENV
+        elif [ "${{ env.ENV_NAME }}" = "qa" ]; then
+          echo "ANYPOINT_PLATFORM_CLIENT_ID=${{ vars.ANYPOINT_PLATFORM_CLIENT_ID_QA }}" >> $GITHUB_ENV
+          echo "ANYPOINT_PLATFORM_CLIENT_SECRET=${{ vars.ANYPOINT_PLATFORM_CLIENT_SECRET_QA }}" >> $GITHUB_ENV
+          echo "QA Client ID: ${{ vars.ANYPOINT_PLATFORM_CLIENT_ID_QA }}"
+          echo "QA Client Secret: ${{ vars.ANYPOINT_PLATFORM_CLIENT_SECRET_QA }}"
+        elif [ "${{ env.ENV_NAME }}" = "prod" ]; then
+          echo "ANYPOINT_PLATFORM_CLIENT_ID=${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID_PROD }}" >> $GITHUB_ENV
+          echo "ANYPOINT_PLATFORM_CLIENT_SECRET=${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET_PROD }}" >> $GITHUB_ENV
+        fi
+        
+    - name: Deploy to CloudHub
+      run: |
+        artifactName=$(ls *.jar | head -1) 
+        mvn -X deploy -e -DmuleDeploy -Dmule.artifact=$artifactName -Denv=${{ env.ENV_NAME }} -P${{ env.ENV_NAME }} -s .maven/settings.xml -Danypoint.platform.client_id=${{ env.ANYPOINT_PLATFORM_CLIENT_ID }} -Danypoint.platform.client_secret=${{ env.ANYPOINT_PLATFORM_CLIENT_SECRET }} -DskipDeploymentVerification="true" --file=pom.xml
