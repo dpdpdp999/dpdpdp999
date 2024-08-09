@@ -142,6 +142,9 @@ jobs:
         if [ "${{ env.ENV_NAME }}" = "dev" ]; then
           echo "ANYPOINT_PLATFORM_CLIENT_ID=${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID_DEV }}" >> $GITHUB_ENV
           echo "ANYPOINT_PLATFORM_CLIENT_SECRET=${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET_DEV }}" >> $GITHUB_ENV
+          echo "HOSTNAME=${{ vars.DEV_HOSTNAME }}" >> $GITHUB_ENV
+          echo "KEY=${{ vars.DEV_KEY }}" >> $GITHUB_ENV
+          echo "TIMEOUT=${{ secrets.DEV_TIMEOUT }}" >> $GITHUB_ENV
         elif [ "${{ env.ENV_NAME }}" = "qa" ]; then
           echo "ANYPOINT_PLATFORM_CLIENT_ID=${{ vars.ANYPOINT_PLATFORM_CLIENT_ID_QA }}" >> $GITHUB_ENV
           echo "ANYPOINT_PLATFORM_CLIENT_SECRET=${{ vars.ANYPOINT_PLATFORM_CLIENT_SECRET_QA }}" >> $GITHUB_ENV
