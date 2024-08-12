@@ -43,19 +43,11 @@ jobs:
         
     - name: Set Environment Specific Variables
       run: |
-        if [ "${{ env.ENV_NAME }}" = "dev" ]; then
-          echo "HOSTNAME=${{ vars.DEV_HOSTNAME }}" >> $GITHUB_ENV
-          echo "KEY=${{ vars.DEV_KEY }}" >> $GITHUB_ENV
-          echo "TIMEOUT=${{ secrets.DEV_TIMEOUT }}" >> $GITHUB_ENV
-        elif [ "${{ env.ENV_NAME }}" = "qa" ]; then
-          echo "HOSTNAME=${{ secrets.QA_HOSTNAME }}" >> $GITHUB_ENV
-          echo "KEY=${{ secrets.QA_KEY }}" >> $GITHUB_ENV
-          echo "TIMEOUT=${{ secrets.QA_TIMEOUT }}" >> $GITHUB_ENV
-        elif [ "${{ env.ENV_NAME }}" = "prod" ]; then
-          echo "HOSTNAME=${{ secrets.PROD_HOSTNAME }}" >> $GITHUB_ENV
-          echo "KEY=${{ secrets.PROD_KEY }}" >> $GITHUB_ENV
-          echo "TIMEOUT=${{ secrets.PROD_TIMEOUT }}" >> $GITHUB_ENV
-        fi
+        ENV_NAME_UPPER=$(echo "${{ env.ENV_NAME }}" | tr '[:lower:]' '[:upper:]')
+        echo "ENV_NAME_UPPER=${ENV_NAME_UPPER}" >> $GITHUB_ENV
+        echo "HOSTNAME=${{ secrets['${ENV_NAME_UPPER}_HOSTNAME'] }}" >> $GITHUB_ENV
+        echo "KEY=${{ secrets['${ENV_NAME_UPPER}_KEY'] }}" >> $GITHUB_ENV
+        echo "TIMEOUT=${{ secrets['${ENV_NAME_UPPER}_TIMEOUT'] }}" >> $GITHUB_ENV
     
     - name: Print effective-settings (optional)
       run: mvn help:effective-settings
