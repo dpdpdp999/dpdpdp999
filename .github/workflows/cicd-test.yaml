@@ -109,8 +109,6 @@ jobs:
       CA_CLIENT_ID: ${{ secrets.CA_CLIENT_ID }}
       CA_CLIENT_SECRET: ${{ secrets.CA_CLIENT_SECRET }}
       ENV_NAME: ${{ github.event_name == 'pull_request' && github.base_ref || github.ref_name }}      
-      ANYPOINT_PLATFORM_CLIENT_ID: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID_QA }}
-      ANYPOINT_PLATFORM_CLIENT_SECRET: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET_QA }}
 
 
     steps:
@@ -129,24 +127,14 @@ jobs:
       with:
         name: artifacts
     - name: Set Anypoint Platform Secrets
-      id: set_secrets
-      run: |
-        if [ "${{ env.ENV_NAME }}" = "dev" ]; then
-          echo "ANYPOINT_PLATFORM_CLIENT_ID=${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID_DEV }}" >> $GITHUB_ENV
-          echo "ANYPOINT_PLATFORM_CLIENT_SECRET=${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET_DEV }}" >> $GITHUB_ENV
-          echo "HOSTNAME=${{ vars.DEV_HOSTNAME }}" >> $GITHUB_ENV
-          echo "KEY=${{ vars.DEV_KEY }}" >> $GITHUB_ENV
-          echo "TIMEOUT=${{ secrets.DEV_TIMEOUT }}" >> $GITHUB_ENV
-        elif [ "${{ env.ENV_NAME }}" = "qa" ]; then
-          echo "ANYPOINT_PLATFORM_CLIENT_ID=${{ vars.ANYPOINT_PLATFORM_CLIENT_ID_QA }}" >> $GITHUB_ENV
-          echo "ANYPOINT_PLATFORM_CLIENT_SECRET=${{ vars.ANYPOINT_PLATFORM_CLIENT_SECRET_QA }}" >> $GITHUB_ENV
-          echo "QA Client ID: ${{ vars.ANYPOINT_PLATFORM_CLIENT_ID_QA }}"
-          echo "QA Client Secret: ${{ vars.ANYPOINT_PLATFORM_CLIENT_SECRET_QA }}"
-        elif [ "${{ env.ENV_NAME }}" = "prod" ]; then
-          echo "ANYPOINT_PLATFORM_CLIENT_ID=${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID_PROD }}" >> $GITHUB_ENV
-          echo "ANYPOINT_PLATFORM_CLIENT_SECRET=${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET_PROD }}" >> $GITHUB_ENV
-        fi
-        
+    id: set_secrets
+    run: |
+      ENV_NAME_UPPER=$(echo "${{ env.ENV_NAME }}" | tr '[:lower:]' '[:upper:]')
+      echo "ANYPOINT_PLATFORM_CLIENT_ID=${{ secrets['ANYPOINT_PLATFORM_CLIENT_ID_' + ENV_NAME_UPPER] }}" >> $GITHUB_ENV
+      echo "ANYPOINT_PLATFORM_CLIENT_SECRET=${{ secrets['ANYPOINT_PLATFORM_CLIENT_SECRET_' + ENV_NAME_UPPER] }}" >> $GITHUB_ENV
+      echo "HOSTNAME=${{ secrets['${ENV_NAME_UPPER}_HOSTNAME'] }}" >> $GITHUB_ENV
+      echo "KEY=${{ secrets['${ENV_NAME_UPPER}_KEY'] }}" >> $GITHUB_ENV
+
     - name: Deploy to CloudHub
       run: |
         artifactName=$(ls *.jar | head -1) 
