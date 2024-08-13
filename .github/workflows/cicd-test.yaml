@@ -62,7 +62,14 @@ jobs:
           echo "HOSTNAME=${{ secrets.PROD_HOSTNAME }}" >> $GITHUB_OUTPUT
           echo "KEY=${{ secrets.PROD_KEY }}" >> $GITHUB_OUTPUT
         fi
-    
+
+    - name: Debug set_env_vars
+      run: |
+        echo "HOSTNAME: ${{ steps.set_env_vars.outputs.HOSTNAME }}"
+        echo "KEY: ${{ steps.set_env_vars.outputs.KEY }}"
+        echo "ANYPOINT_PLATFORM_CLIENT_ID: ${{ steps.set_env_vars.outputs.ANYPOINT_PLATFORM_CLIENT_ID }}"
+        echo "ANYPOINT_PLATFORM_CLIENT_SECRET: ${{ steps.set_env_vars.outputs.ANYPOINT_PLATFORM_CLIENT_SECRET }}"
+        
     - name: Print effective-settings (optional)
       run: mvn help:effective-settings
 
