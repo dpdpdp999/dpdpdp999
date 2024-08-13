@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>e22eea98-1cd3-49fd-9540-a8802b565500</groupId>
 	<artifactId>expapi${mule.applicationName}</artifactId>
-	<version>1.0.58${version.suffix}</version>
+	<version>1.0.71${version.suffix}</version>
 	<packaging>mule-application</packaging>
 	<name>expapi</name>
 	<properties>
@@ -13,8 +13,8 @@
 		<app.majorVersion>v1</app.majorVersion>
 		<mule.maven.plugin.version>4.0.0</mule.maven.plugin.version>
 		<munit.version>2.3.14</munit.version>
-		<version.suffix></version.suffix>
-		<mule.applicationName></mule.applicationName>
+		<version.suffix/>
+		<mule.applicationName/>
 	</properties>
 	<build>
 		<plugins>
@@ -23,27 +23,27 @@
 				<artifactId>maven-clean-plugin</artifactId>
 				<version>3.2.0</version>
 			</plugin>
-   <!--     <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-antrun-plugin</artifactId>
-            <version>1.9</version>
-            <executions>
-                <execution>
-                    <phase>validate</phase>
-                    <goals>
-                        <goal>run</goal>
-                    </goals>
-                    <configuration>
-                        <tasks>
-                            <echo>Active Profile: ${env}</echo>
-                            <echo>Mule Environment: ${mule.environment}</echo>
-                            <echo>Application Name: ${mule.applicationName}</echo>
-                            <echo>Project Version: ${project.version}</echo>
-                        </tasks>
-                    </configuration>
-                </execution>
-            </executions>
-        </plugin>  -->
+			<!--     <plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-antrun-plugin</artifactId>
+			<version>1.9</version>
+			<executions>
+				<execution>
+					<phase>validate</phase>
+					<goals>
+						<goal>run</goal>
+					</goals>
+					<configuration>
+						<tasks>
+							<echo>Active Profile: ${env}</echo>
+							<echo>Mule Environment: ${mule.environment}</echo>
+							<echo>Application Name: ${mule.applicationName}</echo>
+							<echo>Project Version: ${project.version}</echo>
+						</tasks>
+					</configuration>
+				</execution>
+			</executions>
+		</plugin>  -->
 			<plugin>
 				<groupId>org.mule.tools.maven</groupId>
 				<artifactId>mule-maven-plugin</artifactId>
@@ -62,7 +62,10 @@
 						<vCores>0.1</vCores>
 						<skipDeploymentVerification>true</skipDeploymentVerification>
 						<properties>
-							<env>${mule.environment}</env></properties>
+							<env>${mule.environment}</env>
+							<datadog.host>${datadog.host}</datadog.host>
+							<datadog.key>${datadog.key}</datadog.key>
+						</properties>
 						<deploymentSettings>
 							<http>
 								<inbound>
@@ -94,7 +97,7 @@
 					<classifier>mule-application</classifier>
 				</configuration>
 			</plugin>
-<!-- <plugin>
+			<!-- <plugin>
 <groupId>com.mulesoft.munit.tools</groupId>
 <artifactId>munit-maven-plugin</artifactId>
 <version>${munit.version}</version>
@@ -112,8 +115,8 @@
 <coverage>
 <runCoverage>true</runCoverage>
 <failBuild>true</failBuild>
- 
-            <requiredApplicationCoverage>80</requiredApplicationCoverage>
+
+			<requiredApplicationCoverage>80</requiredApplicationCoverage>
 <requiredResourceCoverage>50</requiredResourceCoverage>
 <requiredFlowCoverage>50</requiredFlowCoverage>
 <formats>
@@ -241,8 +244,8 @@
 			</activation>
 			<properties>
 				<mule.environment>prod</mule.environment>
-				<mule.applicationName></mule.applicationName>
-				<version.suffix></version.suffix>
+				<mule.applicationName/>
+				<version.suffix/>
 			</properties>
 		</profile>
 	</profiles>
