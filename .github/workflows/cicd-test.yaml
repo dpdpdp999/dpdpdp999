@@ -22,6 +22,12 @@ jobs:
       CA_CLIENT_SECRET: ${{ secrets.CA_CLIENT_SECRET }}
       ENV_NAME: ${{ github.event_name == 'pull_request' && github.base_ref || github.ref_name }}
 
+    outputs:
+      HOSTNAME: ${{ steps.set_env_vars.outputs.HOSTNAME }}
+      KEY: ${{ steps.set_env_vars.outputs.KEY }}
+      ANYPOINT_PLATFORM_CLIENT_ID: ${{ steps.set_env_vars.outputs.ANYPOINT_PLATFORM_CLIENT_ID }}
+      ANYPOINT_PLATFORM_CLIENT_SECRET: ${{ steps.set_env_vars.outputs.ANYPOINT_PLATFORM_CLIENT_SECRET }}
+
     steps:
     
     - name: Checkout this repo
@@ -42,16 +48,19 @@ jobs:
         java-version: 1.8
         
     - name: Set Environment Specific Variables
+      id: set_env_vars
       run: |
         if [ "${{ env.ENV_NAME }}" = "dev" ]; then
-          echo "HOSTNAME=${{ vars.DATADOG_HOST_DEV }}" >> $GITHUB_ENV
-          echo "KEY=${{ vars.DATADOG_KEY_DEV }}" >> $GITHUB_ENV
+          echo "HOSTNAME=${{ vars.DATADOG_HOST_DEV }}" >> $GITHUB_OUTPUT
+          echo "KEY=${{ vars.DATADOG_KEY_DEV }}" >> $GITHUB_OUTPUT
+          echo "ANYPOINT_PLATFORM_CLIENT_ID=${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID_DEV }}" >> $GITHUB_OUTPUT
+          echo "ANYPOINT_PLATFORM_CLIENT_SECRET=${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET_DEV }}" >> $GITHUB_OUTPUT
         elif [ "${{ env.ENV_NAME }}" = "qa" ]; then
-          echo "HOSTNAME=${{ secrets.QA_HOSTNAME }}" >> $GITHUB_ENV
-          echo "KEY=${{ secrets.QA_KEY }}" >> $GITHUB_ENV
+          echo "HOSTNAME=${{ secrets.QA_HOSTNAME }}" >> $GITHUB_OUTPUT
+          echo "KEY=${{ secrets.QA_KEY }}" >> $GITHUB_OUTPUT
         elif [ "${{ env.ENV_NAME }}" = "prod" ]; then
-          echo "HOSTNAME=${{ secrets.PROD_HOSTNAME }}" >> $GITHUB_ENV
-          echo "KEY=${{ secrets.PROD_KEY }}" >> $GITHUB_ENV
+          echo "HOSTNAME=${{ secrets.PROD_HOSTNAME }}" >> $GITHUB_OUTPUT
+          echo "KEY=${{ secrets.PROD_KEY }}" >> $GITHUB_OUTPUT
         fi
     
     - name: Print effective-settings (optional)
@@ -114,8 +123,10 @@ jobs:
       CA_CLIENT_ID: ${{ secrets.CA_CLIENT_ID }}
       CA_CLIENT_SECRET: ${{ secrets.CA_CLIENT_SECRET }}
       ENV_NAME: ${{ github.event_name == 'pull_request' && github.base_ref || github.ref_name }}      
-      ANYPOINT_PLATFORM_CLIENT_ID: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID_QA }}
-      ANYPOINT_PLATFORM_CLIENT_SECRET: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET_QA }}
+      ANYPOINT_PLATFORM_CLIENT_ID: ${{ needs.build.outputs.ANYPOINT_PLATFORM_CLIENT_ID }}
+      ANYPOINT_PLATFORM_CLIENT_SECRET: ${{ needs.build.outputs.ANYPOINT_PLATFORM_CLIENT_SECRET }}
+      HOSTNAME: ${{ needs.build.outputs.HOSTNAME }}
+      KEY: ${{ needs.build.outputs.KEY }}
 
 
     steps:
@@ -133,21 +144,6 @@ jobs:
     - uses: actions/download-artifact@v3
       with:
         name: artifacts
-    - name: Set Anypoint Platform Secrets
-      id: set_secrets
-      run: |
-        if [ "${{ env.ENV_NAME }}" = "dev" ]; then
-          echo "ANYPOINT_PLATFORM_CLIENT_ID=${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID_DEV }}" >> $GITHUB_ENV
-          echo "ANYPOINT_PLATFORM_CLIENT_SECRET=${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET_DEV }}" >> $GITHUB_ENV
-          echo "HOSTNAME=${{ vars.DATADOG_HOST_DEV }}" >> $GITHUB_ENV
-          echo "KEY=${{ vars.DATADOG_KEY_DEV }}" >> $GITHUB_ENV
-        elif [ "${{ env.ENV_NAME }}" = "qa" ]; then
-          echo "ANYPOINT_PLATFORM_CLIENT_ID=${{ vars.ANYPOINT_PLATFORM_CLIENT_ID_QA }}" >> $GITHUB_ENV
-          echo "ANYPOINT_PLATFORM_CLIENT_SECRET=${{ vars.ANYPOINT_PLATFORM_CLIENT_SECRET_QA }}" >> $GITHUB_ENV
-        elif [ "${{ env.ENV_NAME }}" = "prod" ]; then
-          echo "ANYPOINT_PLATFORM_CLIENT_ID=${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID_PROD }}" >> $GITHUB_ENV
-          echo "ANYPOINT_PLATFORM_CLIENT_SECRET=${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET_PROD }}" >> $GITHUB_ENV
-        fi
         
     - name: Deploy to CloudHub
       run: |
