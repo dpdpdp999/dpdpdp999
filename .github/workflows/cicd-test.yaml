@@ -56,11 +56,15 @@ jobs:
           echo "ANYPOINT_PLATFORM_CLIENT_ID=${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID_DEV }}" >> $GITHUB_OUTPUT
           echo "ANYPOINT_PLATFORM_CLIENT_SECRET=${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET_DEV }}" >> $GITHUB_OUTPUT
         elif [ "${{ env.ENV_NAME }}" = "qa" ]; then
-          echo "HOSTNAME=${{ secrets.QA_HOSTNAME }}" >> $GITHUB_OUTPUT
-          echo "KEY=${{ secrets.QA_KEY }}" >> $GITHUB_OUTPUT
+          echo "HOSTNAME=${{ vars.DATADOG_HOST_QA }}" >> $GITHUB_OUTPUT
+          echo "KEY=${{ vars.DATADOG_KEY_QA }}" >> $GITHUB_OUTPUT
+          echo "ANYPOINT_PLATFORM_CLIENT_ID=${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID_QA }}" >> $GITHUB_OUTPUT
+          echo "ANYPOINT_PLATFORM_CLIENT_SECRET=${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET_QA }}" >> $GITHUB_OUTPUT       
         elif [ "${{ env.ENV_NAME }}" = "prod" ]; then
-          echo "HOSTNAME=${{ secrets.PROD_HOSTNAME }}" >> $GITHUB_OUTPUT
-          echo "KEY=${{ secrets.PROD_KEY }}" >> $GITHUB_OUTPUT
+          echo "HOSTNAME=${{ vars.DATADOG_HOST_PROD }}" >> $GITHUB_OUTPUT
+          echo "KEY=${{ vars.DATADOG_KEY_PROD }}" >> $GITHUB_OUTPUT
+          echo "ANYPOINT_PLATFORM_CLIENT_ID=${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID_PROD }}" >> $GITHUB_OUTPUT
+          echo "ANYPOINT_PLATFORM_CLIENT_SECRET=${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET_PROD }}" >> $GITHUB_OUTPUT
         fi
 
     - name: Debug set_env_vars
@@ -153,14 +157,6 @@ jobs:
     - uses: actions/download-artifact@v3
       with:
         name: artifacts
-    
-
-    - name: Debug outputs
-      run: |
-        echo "ANYPOINT_PLATFORM_CLIENT_ID: ${{ env.ANYPOINT_PLATFORM_CLIENT_ID }}"
-        echo "ANYPOINT_PLATFORM_CLIENT_SECRET: ${{ env.ANYPOINT_PLATFORM_CLIENT_SECRET }}"
-        echo "HOSTNAME: ${{ env.HOSTNAME }}"
-        echo "KEY: ${{ env.KEY }}"
         
     - name: Deploy to CloudHub
       run: |
