@@ -124,7 +124,9 @@ jobs:
         artifactName=$(ls *.jar | head -1) mvn deploy -s .maven/settings.xml -Dmule.artifact=$artifactName -P${{ env.ENV_NAME }}   
         
   deploy:
-    needs: upload
+    needs: 
+      - upload
+      - build
     runs-on: ubuntu-latest
     env:
       CA_CLIENT_ID: ${{ secrets.CA_CLIENT_ID }}
