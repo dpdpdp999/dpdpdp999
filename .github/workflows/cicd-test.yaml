@@ -144,6 +144,14 @@ jobs:
     - uses: actions/download-artifact@v3
       with:
         name: artifacts
+    
+
+    - name: Debug outputs
+      run: |
+        echo "ANYPOINT_PLATFORM_CLIENT_ID: ${{ env.ANYPOINT_PLATFORM_CLIENT_ID }}"
+        echo "ANYPOINT_PLATFORM_CLIENT_SECRET: ${{ env.ANYPOINT_PLATFORM_CLIENT_SECRET }}"
+        echo "HOSTNAME: ${{ env.HOSTNAME }}"
+        echo "KEY: ${{ env.KEY }}"
         
     - name: Deploy to CloudHub
       run: |
