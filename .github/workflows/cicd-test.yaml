@@ -40,6 +40,18 @@ jobs:
     - name: Debug ENV_NAME_CAPS
       run: echo "ENV_NAME_CAPS is ${{ env.ENV_NAME_CAPS }}"
     
+    - name: Concatenate Strings
+      id: concat_strings
+      run: |
+        BASE_URL="https://api.example.com/"
+        ENV_PATH="path/to/resource"
+        FULL_URL="${BASE_URL}${ENV_PATH}"
+        echo "FULL_URL=${FULL_URL}" >> $GITHUB_ENV
+
+    - name: Use Concatenated URL
+      run: |
+        echo "The concatenated URL is ${{ env.FULL_URL }}"
+        
     - name: Cache dependencies
       uses: actions/cache@v3
       with:
@@ -56,16 +68,22 @@ jobs:
     - name: Set Environment Specific Variables
       id: set_env_vars
       run: |
-        HOSTNAME_VAR="DATADOG_HOST_${{ env.ENV_NAME_CAPS }}"
-        KEY_VAR="DATADOG_KEY_${{ env.ENV_NAME_CAPS }}"
-        CLIENT_ID_VAR="ANYPOINT_PLATFORM_CLIENT_ID_${{ env.ENV_NAME_CAPS }}"
-        CLIENT_SECRET_VAR="ANYPOINT_PLATFORM_CLIENT_SECRET_${{ env.ENV_NAME_CAPS }}"
-
-        echo "HOSTNAME=${!HOSTNAME_VAR}" >> $GITHUB_OUTPUT
-        echo "KEY=${!KEY_VAR}" >> $GITHUB_OUTPUT
-        echo "ANYPOINT_PLATFORM_CLIENT_ID=${{ secrets[CLIENT_ID_VAR] }}" >> $GITHUB_OUTPUT
-        echo "ANYPOINT_PLATFORM_CLIENT_SECRET=${{ secrets[CLIENT_SECRET_VAR] }}" >> $GITHUB_OUTPUT
-
+        if [ "${{ env.ENV_NAME }}" = "dev" ]; then
+          echo "HOSTNAME=${{ vars.DATADOG_HOST_DEV }}" >> $GITHUB_OUTPUT
+          echo "KEY=${{ vars.DATADOG_KEY_DEV }}" >> $GITHUB_OUTPUT
+          echo "ANYPOINT_PLATFORM_CLIENT_ID=${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID_DEV }}" >> $GITHUB_OUTPUT
+          echo "ANYPOINT_PLATFORM_CLIENT_SECRET=${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET_DEV }}" >> $GITHUB_OUTPUT
+        elif [ "${{ env.ENV_NAME }}" = "qa" ]; then
+          echo "HOSTNAME=${{ vars.DATADOG_HOST_QA }}" >> $GITHUB_OUTPUT
+          echo "KEY=${{ vars.DATADOG_KEY_QA }}" >> $GITHUB_OUTPUT
+          echo "ANYPOINT_PLATFORM_CLIENT_ID=${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID_QA }}" >> $GITHUB_OUTPUT
+          echo "ANYPOINT_PLATFORM_CLIENT_SECRET=${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET_QA }}" >> $GITHUB_OUTPUT       
+        elif [ "${{ env.ENV_NAME }}" = "prod" ]; then
+          echo "HOSTNAME=${{ vars.DATADOG_HOST_PROD }}" >> $GITHUB_OUTPUT
+          echo "KEY=${{ vars.DATADOG_KEY_PROD }}" >> $GITHUB_OUTPUT
+          echo "ANYPOINT_PLATFORM_CLIENT_ID=${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID_PROD }}" >> $GITHUB_OUTPUT
+          echo "ANYPOINT_PLATFORM_CLIENT_SECRET=${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET_PROD }}" >> $GITHUB_OUTPUT
+        fi
         
     - name: Print effective-settings (optional)
       run: mvn help:effective-settings
