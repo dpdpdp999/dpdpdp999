@@ -21,7 +21,6 @@ jobs:
       CA_CLIENT_ID: ${{ secrets.CA_CLIENT_ID }}
       CA_CLIENT_SECRET: ${{ secrets.CA_CLIENT_SECRET }}
       ENV_NAME: ${{ github.event_name == 'pull_request' && github.base_ref || github.ref_name }}
-      ENV_NAME_CAPS: ${{ (github.event_name == 'pull_request' && github.base_ref || github.ref_name) | upper }}
 
     outputs:
       HOSTNAME: ${{ steps.set_env_vars.outputs.HOSTNAME }}
@@ -34,9 +33,12 @@ jobs:
     - name: Checkout this repo
       uses: actions/checkout@v3
     
-    - name: debug env name
-      run: echo "env name is ${{ env.ENV_NAME_CAPS }}"
+    - name: Convert ENV_NAME to uppercase
+      id: convert_env_name
+      run: echo "ENV_NAME_CAPS=${{ env.ENV_NAME }}" | awk '{print toupper($0)}' >> $GITHUB_ENV
 
+    - name: Debug ENV_NAME_CAPS
+      run: echo "ENV_NAME_CAPS is ${{ env.ENV_NAME_CAPS }}"
     
     - name: Cache dependencies
       uses: actions/cache@v3
