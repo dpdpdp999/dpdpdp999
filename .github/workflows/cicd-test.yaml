@@ -56,29 +56,11 @@ jobs:
     - name: Set Environment Specific Variables
       id: set_env_vars
       run: |
-        if [ "${{ env.ENV_NAME }}" = "dev" ]; then
-          echo "HOSTNAME=${{ vars.DATADOG_HOST_DEV }}" >> $GITHUB_OUTPUT
-          echo "KEY=${{ vars.DATADOG_KEY_DEV }}" >> $GITHUB_OUTPUT
-          echo "ANYPOINT_PLATFORM_CLIENT_ID=${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID_DEV }}" >> $GITHUB_OUTPUT
-          echo "ANYPOINT_PLATFORM_CLIENT_SECRET=${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET_DEV }}" >> $GITHUB_OUTPUT
-        elif [ "${{ env.ENV_NAME }}" = "qa" ]; then
-          echo "HOSTNAME=${{ vars.DATADOG_HOST_QA }}" >> $GITHUB_OUTPUT
-          echo "KEY=${{ vars.DATADOG_KEY_QA }}" >> $GITHUB_OUTPUT
-          echo "ANYPOINT_PLATFORM_CLIENT_ID=${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID_QA }}" >> $GITHUB_OUTPUT
-          echo "ANYPOINT_PLATFORM_CLIENT_SECRET=${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET_QA }}" >> $GITHUB_OUTPUT       
-        elif [ "${{ env.ENV_NAME }}" = "prod" ]; then
-          echo "HOSTNAME=${{ vars.DATADOG_HOST_PROD }}" >> $GITHUB_OUTPUT
-          echo "KEY=${{ vars.DATADOG_KEY_PROD }}" >> $GITHUB_OUTPUT
-          echo "ANYPOINT_PLATFORM_CLIENT_ID=${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID_PROD }}" >> $GITHUB_OUTPUT
-          echo "ANYPOINT_PLATFORM_CLIENT_SECRET=${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET_PROD }}" >> $GITHUB_OUTPUT
-        fi
+        echo "HOSTNAME=${{ vars['DATADOG_HOST_' + env.ENV_NAME_CAPS] }}" >> $GITHUB_OUTPUT
+        echo "KEY=${{ vars['DATADOG_KEY_' + env.ENV_NAME_CAPS] }}" >> $GITHUB_OUTPUT
+        echo "ANYPOINT_PLATFORM_CLIENT_ID=${{ secrets['ANYPOINT_PLATFORM_CLIENT_ID_' + env.ENV_NAME_CAPS] }}" >> $GITHUB_OUTPUT
+        echo "ANYPOINT_PLATFORM_CLIENT_SECRET=${{ secrets['ANYPOINT_PLATFORM_CLIENT_SECRET_' + env.ENV_NAME_CAPS] }}" >> $GITHUB_OUTPUT
 
-    - name: Debug set_env_vars
-      run: |
-        echo "HOSTNAME: ${{ steps.set_env_vars.outputs.HOSTNAME }}"
-        echo "KEY: ${{ steps.set_env_vars.outputs.KEY }}"
-        echo "ANYPOINT_PLATFORM_CLIENT_ID: ${{ steps.set_env_vars.outputs.ANYPOINT_PLATFORM_CLIENT_ID }}"
-        echo "ANYPOINT_PLATFORM_CLIENT_SECRET: ${{ steps.set_env_vars.outputs.ANYPOINT_PLATFORM_CLIENT_SECRET }}"
         
     - name: Print effective-settings (optional)
       run: mvn help:effective-settings
