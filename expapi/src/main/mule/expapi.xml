@@ -9,7 +9,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 		<http:request-connection host="localhost" port="8081"/>
 	</http:request-config>
 	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="e55bf869-a368-47ae-a49c-3820ea9ba970" >
-		<http:listener-connection host="${http.host}" port="${http.port}" />
+		<http:listener-connection host="${http.host}" port="${http.port}" readTimeout="10000"/>
 	</http:listener-config>
 	<configuration-properties doc:name="Configuration properties" doc:id="929e8de6-7097-4166-838c-2547cb5d6907" file="properties/${env}.yaml" />
 	<flow name="expapiFlow" doc:id="1ad732a3-504b-46e8-bd40-26452197b2bb" >
