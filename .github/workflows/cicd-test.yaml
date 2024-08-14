@@ -56,10 +56,15 @@ jobs:
     - name: Set Environment Specific Variables
       id: set_env_vars
       run: |
-        echo "HOSTNAME=${{ vars['DATADOG_HOST_' + env.ENV_NAME_CAPS] }}" >> $GITHUB_OUTPUT
-        echo "KEY=${{ vars['DATADOG_KEY_' + env.ENV_NAME_CAPS] }}" >> $GITHUB_OUTPUT
-        echo "ANYPOINT_PLATFORM_CLIENT_ID=${{ secrets['ANYPOINT_PLATFORM_CLIENT_ID_' + env.ENV_NAME_CAPS] }}" >> $GITHUB_OUTPUT
-        echo "ANYPOINT_PLATFORM_CLIENT_SECRET=${{ secrets['ANYPOINT_PLATFORM_CLIENT_SECRET_' + env.ENV_NAME_CAPS] }}" >> $GITHUB_OUTPUT
+        HOSTNAME_VAR="DATADOG_HOST_${{ env.ENV_NAME_CAPS }}"
+        KEY_VAR="DATADOG_KEY_${{ env.ENV_NAME_CAPS }}"
+        CLIENT_ID_VAR="ANYPOINT_PLATFORM_CLIENT_ID_${{ env.ENV_NAME_CAPS }}"
+        CLIENT_SECRET_VAR="ANYPOINT_PLATFORM_CLIENT_SECRET_${{ env.ENV_NAME_CAPS }}"
+
+        echo "HOSTNAME=${!HOSTNAME_VAR}" >> $GITHUB_OUTPUT
+        echo "KEY=${!KEY_VAR}" >> $GITHUB_OUTPUT
+        echo "ANYPOINT_PLATFORM_CLIENT_ID=${{ secrets[CLIENT_ID_VAR] }}" >> $GITHUB_OUTPUT
+        echo "ANYPOINT_PLATFORM_CLIENT_SECRET=${{ secrets[CLIENT_SECRET_VAR] }}" >> $GITHUB_OUTPUT
 
         
     - name: Print effective-settings (optional)
