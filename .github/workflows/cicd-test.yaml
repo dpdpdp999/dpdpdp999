@@ -50,6 +50,7 @@ jobs:
         path: target/site/munit/coverage/
 
   build:
+    needs: test
     runs-on: ubuntu-latest
     env:
       CA_CLIENT_ID: ${{ secrets.CA_CLIENT_ID }}
