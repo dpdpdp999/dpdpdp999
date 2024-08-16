@@ -6,22 +6,106 @@
   Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International Public License,
   a copy of which has been included with this distribution in the LICENSE.txt file.
 -->
-<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd">
-  <servers>
+<settings
+	xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd">
+	<servers>
 		<server>
 			<id>MuleRepository</id>
 			<username>apisero.nexus</username>
 			<password>pWhdnHcG</password>
 		</server>
 		<server>
-            <id>anypoint-exchange-v3</id>
-            <username>~~~Client~~~</username>
-            <password>${CA_CLIENT_ID}~?~${CA_CLIENT_SECRET}</password>
-        </server>
+			<id>anypoint-exchange-v3</id>
+			<username>~~~Client~~~</username>
+			<password>${CA_CLIENT_ID}~?~${CA_CLIENT_SECRET}</password>
+		</server>
 		<server>
-            <id>ca.anypoint.credentials</id>
-            <username>~~~Client~~~</username>
-            <password>${CA_CLIENT_ID}~?~${CA_CLIENT_SECRET}</password>
-        </server>
- </servers>
+			<id>ca.anypoint.credentials</id>
+			<username>~~~Client~~~</username>
+			<password>${CA_CLIENT_ID}~?~${CA_CLIENT_SECRET}</password>
+		</server>
+	</servers>
+	<profiles>
+		<profile>
+			<id>Mule</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<repositories>
+				<!-- MuleSoft public repositories -->
+				<repository>
+					<id>mulesoft-release</id>
+					<url>https://repository.mulesoft.org/nexus/content/groups/public</url>
+					<releases>
+						<enabled>true</enabled>
+					</releases>
+					<snapshots>
+						<enabled>false</enabled>
+					</snapshots>
+				</repository>
+				<repository>
+					<id>mulesoft-snapshots</id>
+					<url>https://repository.mulesoft.org/nexus/content/groups/public-snapshots</url>
+					<releases>
+						<enabled>false</enabled>
+					</releases>
+					<snapshots>
+						<enabled>true</enabled>
+					</snapshots>
+				</repository>
+				<repository>
+					<id>mulesoft-public</id>
+					<!-- <id>MuleRepository</id> -->
+					<name>MuleSoft Public Repository</name>
+					<url>https://repository.mulesoft.org/nexus/content/repositories/public/</url>
+					<layout>default</layout>
+				</repository>
+				<!-- MuleSoft EE repositories -->
+				<repository>
+					<id>MuleRepository</id>
+					<url>https://repository.mulesoft.org/nexus-ee/content/repositories/releases-ee/</url>
+					<layout>default</layout>
+					<releases>
+						<enabled>true</enabled>
+					</releases>
+					<snapshots>
+						<enabled>true</enabled>
+					</snapshots>
+				</repository>
+				<repository>
+					<id>central</id>
+					<url>https://repo.maven.apache.org/maven2</url>
+					<releases>
+						<enabled>true</enabled>
+					</releases>
+				</repository>
+				<repository>
+					<id>anypoint-exchange-v3</id>
+					<name>Anypoint Exchange</name>
+					<url>https://maven.anypoint.mulesoft.com/api/v3/maven</url>
+					<layout>default</layout>
+				</repository>
+			</repositories>
+			<pluginRepositories>
+				<pluginRepository>
+					<id>mulesoft-release</id>
+					<name>mulesoft release repository</name>
+					<layout>default</layout>
+					<url>https://repository.mulesoft.org/nexus/content/groups/public</url>
+					<snapshots>
+						<enabled>false</enabled>
+					</snapshots>
+				</pluginRepository>
+				<!--<pluginRepository><id>MuleRepository</id><url>https://repository.mulesoft.org/nexus-ee/content/repositories/releases-ee/</url><layout>default</layout><releases><enabled>true</enabled></releases><snapshots><enabled>true</enabled></snapshots></pluginRepository> -->
+				<pluginRepository>
+					<id>central</id>
+					<url>https://repo.maven.apache.org/maven2</url>
+					<releases>
+						<enabled>true</enabled>
+					</releases>
+				</pluginRepository>
+			</pluginRepositories>
+		</profile>
+	</profiles>
 </settings>
