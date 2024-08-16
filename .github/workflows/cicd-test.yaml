@@ -41,7 +41,7 @@ jobs:
     
     - name: Run MUnit tests
       run: |
-        mvn clean test -P${{ env.ENV_NAME }} -Denv=${{ env.ENV_NAME }} -DskipTests=false
+        mvn clean test -s .maven/settings.xml -P${{ env.ENV_NAME }} -Denv=${{ env.ENV_NAME }} -DskipTests=false
     
     - name: Upload MUnit reports
       uses: actions/upload-artifact@v3
