@@ -42,12 +42,6 @@ jobs:
     - name: Run MUnit tests
       run: |
         mvn clean test -s .maven/settings.xml -P${{ env.ENV_NAME }} -Denv=${{ env.ENV_NAME }} -DskipTests=false
-    
-    - name: Upload MUnit reports
-      uses: actions/upload-artifact@v3
-      with:
-        name: munit-test-reports
-        path: target/site/munit/coverage/
 
   build:
     needs: test
@@ -67,25 +61,6 @@ jobs:
     
     - name: Checkout this repo
       uses: actions/checkout@v3
-    
-    - name: Convert ENV_NAME to uppercase
-      id: convert_env_name
-      run: echo "ENV_NAME_CAPS=${{ env.ENV_NAME }}" | awk '{print toupper($0)}' >> $GITHUB_ENV
-
-    - name: Debug ENV_NAME_CAPS
-      run: echo "ENV_NAME_CAPS is ${{ env.ENV_NAME_CAPS }}"
-    
-    - name: Concatenate Strings
-      id: concat_strings
-      run: |
-        BASE_URL="https://api.example.com/"
-        ENV_PATH="path/to/resource"
-        FULL_URL="${BASE_URL}${ENV_PATH}"
-        echo "FULL_URL=${FULL_URL}" >> $GITHUB_ENV
-
-    - name: Use Concatenated URL
-      run: |
-        echo "The concatenated URL is ${{ env.FULL_URL }}"
         
     - name: Cache dependencies
       uses: actions/cache@v3
@@ -119,16 +94,7 @@ jobs:
           echo "ANYPOINT_PLATFORM_CLIENT_ID=${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID_PROD }}" >> $GITHUB_OUTPUT
           echo "ANYPOINT_PLATFORM_CLIENT_SECRET=${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET_PROD }}" >> $GITHUB_OUTPUT
         fi
-        
-    - name: Print effective-settings (optional)
-      run: mvn help:effective-settings
 
-    - name: Check Active Maven Profiles
-      run: mvn help:active-profiles -P${{ env.ENV_NAME }}
-
-    - name: Check pom data
-      run: mvn help:effective-pom -P${{ env.ENV_NAME }}
-    
     - name: Build with Maven
       run: mvn -B clean package -s .maven/settings.xml -P${{ env.ENV_NAME }} -Denv=${{ env.ENV_NAME }} -DskipMunitTests
       
@@ -186,7 +152,6 @@ jobs:
       ANYPOINT_PLATFORM_CLIENT_SECRET: ${{ needs.build.outputs.ANYPOINT_PLATFORM_CLIENT_SECRET }}
       HOSTNAME: ${{ needs.build.outputs.HOSTNAME }}
       KEY: ${{ needs.build.outputs.KEY }}
-
 
     steps:
   

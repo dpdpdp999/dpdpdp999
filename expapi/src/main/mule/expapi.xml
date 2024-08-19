@@ -81,5 +81,19 @@ output application/json
 						</try> [STUDIO] -->
 		
 		<logger level="INFO" doc:name="Logger" doc:id="a8fb9b99-59bb-4625-bcc3-51265e79b33c" message="after calling request"/>
+		<error-handler >
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="239f1098-b4c8-4d81-a4ee-244b4374d218" type="EXPRESSION">
+				<logger level="INFO" doc:name="Logger" doc:id="56b0fd0d-0fd0-49fa-a6c2-ffb2df596ef9" message="expression error"/>
+			</on-error-continue>
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="d3bb1fa9-762e-46c2-b1d2-ed3b94ee3f54" when='#[payload contains "xyz"]'>
+				<logger level="INFO" doc:name="Logger" doc:id="e4c5e417-154d-4408-ac33-d5868f8732b2" message="abcd"/>
+			</on-error-continue>
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="f1d9a992-6f52-41bb-be2a-be5821b46a3d" when='#[payload contains "xyzz"]'>
+				<logger level="INFO" doc:name="Logger" doc:id="e25d2e26-2a96-42a1-9365-86130bce82c1" message="trial"/>
+			</on-error-continue>
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="520df117-313b-4809-9514-f328d69cc46d" >
+				<logger level="INFO" doc:name="Logger" doc:id="6ce43c9e-e989-4174-b77b-c087608b2d8d" />
+			</on-error-continue>
+		</error-handler>
 	</flow>
 </mule>
