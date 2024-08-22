@@ -134,6 +134,15 @@ jobs:
     - uses: actions/download-artifact@v3
       with:
         name: artifacts
+
+    - name: Move JAR File with Specific Name to Current Directory
+      run: |
+        mv /home/runner/work/accounting_mulesoft/accounting_mulesoft/*brex-erp-exp*.jar . || exit 1
+
+    - name: Debug - Print artifactName
+      run: |
+        artifactName=$(ls *.jar | head -1)
+        echo "Artifact Name: $artifactName"
     
     - name: Upload to Exchange
       run: |
