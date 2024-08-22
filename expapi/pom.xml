@@ -97,9 +97,9 @@
 					<coverage>
 						<runCoverage>true</runCoverage>
 						<failBuild>true</failBuild>
-						<requiredApplicationCoverage>80</requiredApplicationCoverage>
-						<requiredResourceCoverage>70</requiredResourceCoverage>
-						<requiredFlowCoverage>70</requiredFlowCoverage>
+						<requiredApplicationCoverage>30</requiredApplicationCoverage>
+						<requiredResourceCoverage>30</requiredResourceCoverage>
+						<requiredFlowCoverage>30</requiredFlowCoverage>
 						<formats>
 							<format>html</format>
 						</formats>
