@@ -90,6 +90,15 @@ jobs:
           echo "ANYPOINT_PLATFORM_CLIENT_ID=${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID_PROD }}" >> $GITHUB_OUTPUT
           echo "ANYPOINT_PLATFORM_CLIENT_SECRET=${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET_PROD }}" >> $GITHUB_OUTPUT
         fi
+        
+    - name: Print effective-settings
+      run: mvn help:effective-settings
+
+    - name: Check Active Maven Profiles
+      run: mvn help:active-profiles -P${{ env.ENV_NAME }}
+
+    - name: Check pom data
+      run: mvn help:effective-pom -P${{ env.ENV_NAME }}     
 
     - name: Build with Maven
       run: mvn -B clean package -s .maven/settings.xml -P${{ env.ENV_NAME }} -Denv=${{ env.ENV_NAME }} -DskipMunitTests=true
@@ -131,6 +140,15 @@ jobs:
       run: |
         mv /home/runner/work/dpdpdp999/dpdpdp999/*expapi*.jar . || exit 1
 
+    - name: Print effective-settings
+      run: mvn help:effective-settings
+
+    - name: Check Active Maven Profiles
+      run: mvn help:active-profiles -P${{ env.ENV_NAME }}
+
+    - name: Check pom data
+      run: mvn help:effective-pom -P${{ env.ENV_NAME }}     
+
     - name: Debug - Print artifactName
       run: |
         artifactName=$(ls *.jar | head -1)
@@ -138,7 +156,7 @@ jobs:
     
     - name: Upload to Exchange
       run: |
-        artifactName=$(ls *.jar | head -1) mvn deploy -s .maven/settings.xml -Dmule.artifact=$artifactName -P${{ env.ENV_NAME }} -Denv=${{ env.ENV_NAME }} -DskipMunitTests=true
+        artifactName=$(ls *.jar | head -1) mvn deploy -s .maven/settings.xml -P${{ env.ENV_NAME }} -Denv=${{ env.ENV_NAME }} -DskipMunitTests=true
         
   deploy:
     needs: 
