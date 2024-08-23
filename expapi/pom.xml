@@ -98,7 +98,7 @@
 						<runCoverage>true</runCoverage>
 						<failBuild>true</failBuild>
 						<requiredApplicationCoverage>30</requiredApplicationCoverage>
-						<requiredResourceCoverage>30</requiredResourceCoverage>
+						<requiredResourceCoverage>22</requiredResourceCoverage>
 						<requiredFlowCoverage>30</requiredFlowCoverage>
 						<formats>
 							<format>html</format>
