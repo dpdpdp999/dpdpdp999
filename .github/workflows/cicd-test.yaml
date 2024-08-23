@@ -13,14 +13,14 @@ on:
 defaults:
   run:
     working-directory: expapi
-
+env:
+  CA_CLIENT_ID: ${{ secrets.CA_CLIENT_ID }}
+  CA_CLIENT_SECRET: ${{ secrets.CA_CLIENT_SECRET }}
+  ENV_NAME: ${{ github.event_name == 'pull_request' && github.base_ref || github.ref_name }}
+  
 jobs:
   test:
     runs-on: ubuntu-latest
-    env:
-      CA_CLIENT_ID: ${{ secrets.CA_CLIENT_ID }}
-      CA_CLIENT_SECRET: ${{ secrets.CA_CLIENT_SECRET }}
-      ENV_NAME: ${{ github.event_name == 'pull_request' && github.base_ref || github.ref_name }}
       
     steps:
     - name: Checkout this repo
@@ -46,10 +46,6 @@ jobs:
   build:
     needs: test
     runs-on: ubuntu-latest
-    env:
-      CA_CLIENT_ID: ${{ secrets.CA_CLIENT_ID }}
-      CA_CLIENT_SECRET: ${{ secrets.CA_CLIENT_SECRET }}
-      ENV_NAME: ${{ github.event_name == 'pull_request' && github.base_ref || github.ref_name }}
 
     outputs:
       HOSTNAME: ${{ steps.set_env_vars.outputs.HOSTNAME }}
@@ -115,10 +111,6 @@ jobs:
   upload:
     needs: build
     runs-on: ubuntu-latest
-    env:
-      CA_CLIENT_ID: ${{ secrets.CA_CLIENT_ID }}
-      CA_CLIENT_SECRET: ${{ secrets.CA_CLIENT_SECRET }}
-      ENV_NAME: ${{ github.event_name == 'pull_request' && github.base_ref || github.ref_name }}
 
     steps:
     
@@ -152,11 +144,7 @@ jobs:
     needs: 
       - upload
       - build
-    runs-on: ubuntu-latest
-    env:
-      CA_CLIENT_ID: ${{ secrets.CA_CLIENT_ID }}
-      CA_CLIENT_SECRET: ${{ secrets.CA_CLIENT_SECRET }}
-      ENV_NAME: ${{ github.event_name == 'pull_request' && github.base_ref || github.ref_name }}      
+    runs-on: ubuntu-latest   
       ANYPOINT_PLATFORM_CLIENT_ID: ${{ needs.build.outputs.ANYPOINT_PLATFORM_CLIENT_ID }}
       ANYPOINT_PLATFORM_CLIENT_SECRET: ${{ needs.build.outputs.ANYPOINT_PLATFORM_CLIENT_SECRET }}
       HOSTNAME: ${{ needs.build.outputs.HOSTNAME }}
