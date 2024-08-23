@@ -15,8 +15,8 @@
 		<app.majorVersion>v1</app.majorVersion>
 		<mule.maven.plugin.version>4.0.0</mule.maven.plugin.version>
 		<munit.version>2.3.14</munit.version>
-		<version.suffix>${version.suffix}</version.suffix>
-		<mule.applicationName>${mule.applicationName}</mule.applicationName>
+		</version.suffix>
+		</mule.applicationName>
 	</properties>
 	<build>
 		<plugins>
