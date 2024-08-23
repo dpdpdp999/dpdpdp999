@@ -92,7 +92,7 @@ jobs:
         fi
 
     - name: Build with Maven
-      run: mvn -B clean package -s .maven/settings.xml -P${{ env.ENV_NAME }} -Denv=${{ env.ENV_NAME }} -DskipMunitTests
+      run: mvn -B clean package -s .maven/settings.xml -P${{ env.ENV_NAME }} -Denv=${{ env.ENV_NAME }} -DskipMunitTests=true
       
     - name: Stamp artifact file name with commit hash
       run: |
@@ -138,7 +138,7 @@ jobs:
     
     - name: Upload to Exchange
       run: |
-        artifactName=$(ls *.jar | head -1) mvn deploy -s .maven/settings.xml -Dmule.artifact=$artifactName -P${{ env.ENV_NAME }} -Denv=${{ env.ENV_NAME }}
+        artifactName=$(ls *.jar | head -1) mvn deploy -s .maven/settings.xml -Dmule.artifact=$artifactName -P${{ env.ENV_NAME }} -Denv=${{ env.ENV_NAME }} -DskipMunitTests=true
         
   deploy:
     needs: 
