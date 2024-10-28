@@ -97,7 +97,7 @@
 					<classifier>mule-application</classifier>
 				</configuration>
 			</plugin>
-			<!-- <plugin>
+			<!-- <plugin12>
 <groupId>com.mulesoft.munit.tools</groupId>
 <artifactId>munit-maven-plugin</artifactId>
 <version>${munit.version}</version>
